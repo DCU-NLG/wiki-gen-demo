@@ -171,7 +171,7 @@ subprocess.run(['python', path_getClassGenderDBp, filepath_subj, filepath_obj, r
 # Get all variables
 new_triple2predArg, name_conll_templates, path_t2p_out, language_t2p, newEntityName = prepare_variables_xml2CoNLL_conversion(str_PredArg_folder, language, entity_name, triple2predArg)
 # Convert xml into predArg
-subprocess.Popen(['java', '-jar', triple2Conll_jar, name_conll_templates, '230528-WebNLG23_EN-GA_properties.txt', path_t2p_out, language_t2p, newEntityName], stdout = subprocess.PIPE, universal_newlines=True)
+subprocess.Popen(['java', '-jar', triple2Conll_jar, new_triple2predArg, name_conll_templates, '230528-WebNLG23_EN-GA_properties.txt', path_t2p_out, language_t2p, newEntityName], stdout = subprocess.PIPE, universal_newlines=True)
 # Copy conll file to FORGe input folder
 shutil.copy(os.path.join(path_t2p_out, newEntityName+'_'+language_t2p+'.conll'), str_PredArg_folder)
 
