@@ -1,0 +1,9 @@
+[submodule "DCU_TCD_FORGe_WebNLG23"]
+	path = DCU_TCD_FORGe_WebNLG23
+	url = https://github.com/mille-s/DCU_TCD_FORGe_WebNLG23.git
+[submodule "M-FleNS_NLG-Pipeline"]
+	path = M-FleNS_NLG-Pipeline
+	url = https://github.com/mille-s/M-FleNS_NLG-Pipeline.git
+[submodule "WikipediaPage_Generator"]
+	path = WikipediaPage_Generator
+	url = https://github.com/mille-s/WikipediaPage_Generator.git
