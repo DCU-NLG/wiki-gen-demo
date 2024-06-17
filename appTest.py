@@ -5,6 +5,8 @@ import zipfile
 import subprocess
 import sys
 
+root_folder = os.path.join('/content', 'webnlg_demo')
+
 def unzipTo(path_to_zip_file, directory_to_extract_to):
   with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
     zip_ref.extractall(directory_to_extract_to)
@@ -44,8 +46,8 @@ def prepare_repo(root_folder):
   zipWikiImg = os.path.join(root_folder, 'WikipediaPage_Generator', 'code', 'wikipedia-images.zip')
   unzipTo(zipWikiImg, triple2predArg)
   # SPARQL wrapper
-  pipInstall(SPARQLWrapper)
+  pipInstall('SPARQLWrapper')
   # Set other paths
   props_list_path = os.path.join(root_folder, 'DCU_TCD_FORGe_WebNLG23', 'code', 'sorted_properties.txt')
 
-prepare_repo(os.path.join('/content', 'webnlg_demo')
+prepare_repo(root_folder)
