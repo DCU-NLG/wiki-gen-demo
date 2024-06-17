@@ -12,15 +12,18 @@ def unzipTo(path_to_zip_file, directory_to_extract_to):
     zip_ref.extractall(directory_to_extract_to)
 
 def pipInstall(package):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+  subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
-# def install_java():
-#   !apt-get install -y openjdk-8-jdk-headless -qq > /dev/null      #install openjdk
-#   os.environ["JAVA_HOME"] = "/usr/lib/jvm/java-8-openjdk-amd64"     #set environment variable
-#   !update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
-#   !java -version       #check java version
+def install_java8():
+  cmd_java1 = ["apt-get",  "install", "-y", "openjdk-8-jdk-headless", "-qq", ">", "/dev/null"]
+  subprocess.Popen(cmd_java1, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+  os.environ["JAVA_HOME"] = "/usr/lib/jvm/java-8-openjdk-amd64"     #set environment variable
+  cmd_java2 = ["update-alternatives", "--set",  "java", "/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java"]
+  subprocess.Popen(cmd_java2, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+  cmd_java3 = ["java", "-version"]
+  subprocess.Popen(cmd_java3, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
 
-def prepare_repo(root_folder):
+def prepare_repo_ruleBased(root_folder):
   # FORGe
   zipForge = os.path.join(root_folder, 'M-FleNS_NLG-Pipeline', 'code', 'FORGe_colab_v4.zip')
   unzipTo(zipForge, root_folder)
@@ -40,7 +43,7 @@ def prepare_repo(root_folder):
   unzipTo(zipMorph, root_folder)
   cmd_morph1 = ["7z", "a",  "-sfx", root_folder+"/"+morph_folder_name+"/flookup.exe", root_folder+"/"+morph_folder_name+"/flookup"]
   subprocess.Popen(cmd_morph1, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
-  cmd_morph2 = ["chmod",  "755", root_folder+"/"+morph_folder_name+"'/flookup'"]
+  cmd_morph2 = ["chmod",  "755", root_folder+"/"+morph_folder_name+"/flookup"]
   subprocess.Popen(cmd_morph2, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
   # IMG
   zipWikiImg = os.path.join(root_folder, 'WikipediaPage_Generator', 'code', 'wikipedia-images.zip')
@@ -50,4 +53,5 @@ def prepare_repo(root_folder):
   # Set other paths
   props_list_path = os.path.join(root_folder, 'DCU_TCD_FORGe_WebNLG23', 'code', 'sorted_properties.txt')
 
-prepare_repo(root_folder)
+prepare_repo_ruleBased(root_folder)
+install_java8()
