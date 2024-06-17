@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from IPython.display import clear_output, HTML, display
 import subprocess
 import sys
 def pipInstall(package):
   subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 # Install SPARQL wrapper
 pipInstall('SPARQLWrapper')
-clear_output()
 
 import os
 import zipfile
@@ -180,7 +178,7 @@ new_triple2predArg, name_conll_templates, path_t2p_out, language_t2p, newEntityN
 subprocess.Popen(['java', '-jar', triple2Conll_jar, new_triple2predArg, name_conll_templates, '230528-WebNLG23_EN-GA_properties.txt', path_t2p_out, language_t2p, newEntityName], stdout = subprocess.PIPE, universal_newlines=True)
 # There seems to be a lag here between the moment the file is created and the moment it becomes available; I get a FileNotFoundError even though the file seems to be created there correctly
 print('Contemplating life and its purpose...')
-time.sleep(0.5)
+time.sleep(0.25)
 # Copy conll file to FORGe input folder
 shutil.copy(os.path.join(path_t2p_out, newEntityName+'_'+language_t2p+'.conll'), str_PredArg_folder)
 
