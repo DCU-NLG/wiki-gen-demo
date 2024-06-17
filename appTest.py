@@ -10,6 +10,7 @@ pipInstall('SPARQLWrapper')
 
 import os
 import zipfile
+import ipywidgets as widgets
 from WikipediaPage_Generator.code.queryDBpediaProps import get_dbpedia_properties
 from WikipediaPage_Generator.code.utils import get_prop_index_from_table, removeReservedCharsFileName, create_xml, create_GPT_Prompt, create_jsons_SubjAndObj, prepare_variables_xml2CoNLL_conversion, clear_folder, clear_files, count_expected_texts, check_postProcessed_outputs, concatenate_files
 from DCU_TCD_FORGe_WebNLG23.code.GA_inflect import run_GA_morphGen
@@ -141,9 +142,16 @@ entity_name, language, input_category, triple_source, ignore_properties, group_m
 list_triple_objects, list_propObj, list_obj = get_dbpedia_properties(props_list_path, entity_name, triple_source, ignore_properties)
 # What you want to use for selection is list_propObj, and get a list of IDs that we can use to select the corresponding triple object
 
-### INPUT NEEDED: that's the output I was getting with my selection tool
-selected_properties = SelectMultiple(description='Properties', index=(0, 1, 3, 4, 6), layout=Layout(width='642px'), options=('0 - height: 53340.0', '1 - length: 268833.6', '2 - activeYearsEndDate: 1912-04-15', '3 - completionDate: 1912-04-02', '4 - cost: 1500000.0', '5 - height: 53.34', '6 - length: 268.8336', '7 - shipBeam: 28.0416', '8 - shipLaunch: 1911-05-31', '9 - status: Wreck', "10 - status: Struck an iceberg at 11:40 pm (ship's time) 14 April 1912 on her maiden voyage andsank2 h 40 min later on.", '11 - topSpeed: 38.892', '12 - maidenVoyage: 1912-04-10', '13 - orderDate: 1908-09-17', '14 - builder: Belfast', '15 - country: United_Kingdom_of_Great_Britain_and_Ireland', '16 - operator: White_Star_Line', '17 - owner: White_Star_Line', '18 - powerType: Horsepower', '19 - powerType: Boiler'), rows=20, value=('0 - height: 53340.0', '1 - length: 268833.6', '3 - completionDate: 1912-04-02', '4 - cost: 1500000.0', '6 - length: 268.8336'))
-### INPUT NEEDED: list of indices of selected triples
+### START INPUT NEEDED: that's the output I was getting with my selection tool
+selected_properties = widgets.SelectMultiple(
+    options=list_propObj,
+    value=[],
+    rows=len(list_propObj),
+    description='Properties',
+    disabled=False
+)
+# selected_properties = SelectMultiple(description='Properties', index=(0, 1, 3, 4, 6), layout=Layout(width='642px'), options=('0 - height: 53340.0', '1 - length: 268833.6', '2 - activeYearsEndDate: 1912-04-15', '3 - completionDate: 1912-04-02', '4 - cost: 1500000.0', '5 - height: 53.34', '6 - length: 268.8336', '7 - shipBeam: 28.0416', '8 - shipLaunch: 1911-05-31', '9 - status: Wreck', "10 - status: Struck an iceberg at 11:40 pm (ship's time) 14 April 1912 on her maiden voyage andsank2 h 40 min later on.", '11 - topSpeed: 38.892', '12 - maidenVoyage: 1912-04-10', '13 - orderDate: 1908-09-17', '14 - builder: Belfast', '15 - country: United_Kingdom_of_Great_Britain_and_Ireland', '16 - operator: White_Star_Line', '17 - owner: White_Star_Line', '18 - powerType: Horsepower', '19 - powerType: Boiler'), rows=20, value=('0 - height: 53340.0', '1 - length: 268833.6', '3 - completionDate: 1912-04-02', '4 - cost: 1500000.0', '6 - length: 268.8336'))
+### END INPUT NEEDED: list of indices of selected triples
 
 # Convert chosen triples to XML and create LLM prompt
 # Generate list of indices of properties selected by user (index in the list of Triple objects that contains all retrieved triples)
