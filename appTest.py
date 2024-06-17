@@ -52,6 +52,9 @@ def prepare_repo_ruleBased(root_folder):
   pipInstall('SPARQLWrapper')
   # Set other paths
   props_list_path = os.path.join(root_folder, 'DCU_TCD_FORGe_WebNLG23', 'code', 'sorted_properties.txt')
+  return triple2predArg, triple2Conll_jar, morph_folder_name, morph_input_folder, morph_output_folder, props_list_path
 
-prepare_repo_ruleBased(root_folder)
+# Next line doesn't work this way
 install_java8()
+triple2predArg, triple2Conll_jar, morph_folder_name, morph_input_folder, morph_output_folder, props_list_path = prepare_repo_ruleBased(root_folder)
+
