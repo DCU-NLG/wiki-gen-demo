@@ -11,6 +11,7 @@ pipInstall('SPARQLWrapper')
 import os
 import zipfile
 import shutil
+import time
 import ipywidgets as widgets
 from WikipediaPage_Generator.code.queryDBpediaProps import get_dbpedia_properties
 from WikipediaPage_Generator.code.utils import get_prop_index_from_table, removeReservedCharsFileName, create_xml, create_GPT_Prompt, create_jsons_SubjAndObj, prepare_variables_xml2CoNLL_conversion, clear_folder, clear_files, count_expected_texts, check_postProcessed_outputs, concatenate_files
@@ -172,6 +173,8 @@ subprocess.run(['python', path_getClassGenderDBp, filepath_subj, filepath_obj, r
 new_triple2predArg, name_conll_templates, path_t2p_out, language_t2p, newEntityName = prepare_variables_xml2CoNLL_conversion(str_PredArg_folder, language, entity_name, triple2predArg)
 # Convert xml into predArg
 subprocess.Popen(['java', '-jar', triple2Conll_jar, new_triple2predArg, name_conll_templates, '230528-WebNLG23_EN-GA_properties.txt', path_t2p_out, language_t2p, newEntityName], stdout = subprocess.PIPE, universal_newlines=True)
+# There seems to be a lag here between the moment the file is created and the moment it becomes available; I get a FileNotFoundError even though the file seems to be created there correctly
+time.sleep(5)
 # Copy conll file to FORGe input folder
 shutil.copy(os.path.join(path_t2p_out, newEntityName+'_'+language_t2p+'.conll'), str_PredArg_folder)
 
