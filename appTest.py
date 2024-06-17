@@ -21,7 +21,7 @@ def install_java8():
   cmd_java2 = ["update-alternatives", "--set",  "java", "/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java"]
   subprocess.Popen(cmd_java2, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
   cmd_java3 = ["java", "-version"]
-  subprocess.Popen(cmd_java3, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+  subprocess.check_output(cmd_java3, stderr=subprocess.STDOUT)
 
 def prepare_repo_ruleBased(root_folder):
   # FORGe
