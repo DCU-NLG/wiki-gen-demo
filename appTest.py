@@ -38,9 +38,9 @@ def prepare_repo(root_folder):
   os.makedirs(morph_input_folder)
   os.makedirs(morph_output_folder)
   unzipTo(zipMorph, root_folder)
-  cmd_morph1 = ["7z", "a",  "-sfx", morph_folder_name+"'/flookup.exe'", morph_folder_name+"'/flookup'"]
+  cmd_morph1 = ["7z", "a",  "-sfx", root_folder+"/"+morph_folder_name+"/flookup.exe", root_folder+"/"+morph_folder_name+"/flookup"]
   subprocess.Popen(cmd_morph1, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
-  cmd_morph2 = ["chmod",  "755", morph_folder_name+"'/flookup'"]
+  cmd_morph2 = ["chmod",  "755", root_folder+"/"+morph_folder_name+"'/flookup'"]
   subprocess.Popen(cmd_morph2, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
   # IMG
   zipWikiImg = os.path.join(root_folder, 'WikipediaPage_Generator', 'code', 'wikipedia-images.zip')
