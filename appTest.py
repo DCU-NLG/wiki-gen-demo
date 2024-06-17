@@ -209,6 +209,8 @@ else:
 subprocess.run(['python', path_postProc, language, prefinal_output_folder])
 # Check post-processed texts
 check_postProcessed_outputs(root_folder, prefinal_output_folder, count_strs_all_FORGe)
+# Concatenate files
+filename = concatenate_files(root_folder, morph_output_folder, temp_input_folder_morph, split, language, count_strs_all_FORGe)
 
 ########### END 3- Calls to local and imported functions
 
