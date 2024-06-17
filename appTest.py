@@ -163,7 +163,7 @@ create_GPT_Prompt(entity_name, language, list_triples_text)
 
 # Get and write class and gender information from DBpedia
 filepath_subj, filepath_obj = create_jsons_SubjAndObj(entity_name, list_obj, triple2predArg)
-subprocess.run(['python', path_getClassGenderDBp, filepath_subj, filepath_obj])
+subprocess.run(['python', path_getClassGenderDBp, filepath_subj, filepath_obj, root_folder])
 ########### END 3- Calls to local and imported functions
 
 ###################### END B- What goes inside the main function that calls FORGe
