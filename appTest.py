@@ -21,6 +21,7 @@ entity_name = 'Titanic'
 category = 'MeanOfTransportation' #['Unknown', 'Airport', 'Artist', 'Astronaut', 'Athlete', 'Building', 'CelestialBody', 'City', 'ComicsCharacter', 'Company', 'Film', 'Food', 'MeanOfTransportation', 'Monument', 'MusicalWork', 'Politician', 'Scientist', 'SportsTeam', 'University', 'WrittenWork']
 language = 'EN' #['EN, 'GA']
 triple_source = 'Ontology' #['Ontology', 'Infobox']
+# Also look for "### INPUT NEEDED:" lines in the codes below
 ###################### END A- What needs to come from outside of the main function that calls FORGe
 
 ###################### START B- What goes inside the main function that calls FORGe
@@ -140,6 +141,21 @@ entity_name, language, input_category, triple_source, ignore_properties, group_m
 list_triple_objects, list_propObj, list_obj = get_dbpedia_properties(props_list_path, entity_name, triple_source, ignore_properties)
 # What you want to use for selection is list_propObj, and get a list of IDs that we can use to select the corresponding triple object
 
+### INPUT NEEDED: that's the output I was getting with my selection tool
+selected_properties = SelectMultiple(description='Properties', index=(0, 1, 3, 4, 6), layout=Layout(width='642px'), options=('0 - height: 53340.0', '1 - length: 268833.6', '2 - activeYearsEndDate: 1912-04-15', '3 - completionDate: 1912-04-02', '4 - cost: 1500000.0', '5 - height: 53.34', '6 - length: 268.8336', '7 - shipBeam: 28.0416', '8 - shipLaunch: 1911-05-31', '9 - status: Wreck', "10 - status: Struck an iceberg at 11:40 pm (ship's time) 14 April 1912 on her maiden voyage andsank2 h 40 min later on.", '11 - topSpeed: 38.892', '12 - maidenVoyage: 1912-04-10', '13 - orderDate: 1908-09-17', '14 - builder: Belfast', '15 - country: United_Kingdom_of_Great_Britain_and_Ireland', '16 - operator: White_Star_Line', '17 - owner: White_Star_Line', '18 - powerType: Horsepower', '19 - powerType: Boiler'), rows=20, value=('0 - height: 53340.0', '1 - length: 268833.6', '3 - completionDate: 1912-04-02', '4 - cost: 1500000.0', '6 - length: 268.8336'))
+### INPUT NEEDED: list of indices of selected triples
+
+# Convert chosen triples to XML and create LLM prompt
+# Generate list of indices of properties selected by user (index in the list of Triple objects that contains all retrieved triples)
+properties_selected_by_user = get_prop_index_from_table(selected_properties, list_triple_objects)
+# create xml file and retrieve the list of triples in a text format to build a ChatGPT query, saved in GPT_prompt_{entity}.txt on the left
+list_triples_text = create_xml(list_triple_objects, properties_selected_by_user, input_category, triple2predArg)
+# Create a text file that contains a prompt that can be used to produce another version of the current text with GPT.
+create_GPT_Prompt(entity_name, language, list_triples_text)
+
+# Get and write class and gender information from DBpedia
+filepath_subj, filepath_obj = create_jsons_SubjAndObj(entity_name, list_obj, triple2predArg)
+subprocess.run(['python', path_getClassGenderDBp, filepath_subj, filepath_obj])
 ########### END 3- Calls to local and imported functions
 
 ###################### END B- What goes inside the main function that calls FORGe
