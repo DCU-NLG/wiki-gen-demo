@@ -13,9 +13,9 @@ import zipfile
 import shutil
 import time
 import ipywidgets as widgets
-from WikipediaPage_Generator.code.queryDBpediaProps import get_dbpedia_properties
-from WikipediaPage_Generator.code.utils import get_prop_index_from_table, removeReservedCharsFileName, create_xml, create_GPT_Prompt, create_jsons_SubjAndObj, prepare_variables_xml2CoNLL_conversion, clear_folder, clear_files, count_expected_texts, check_postProcessed_outputs, concatenate_files
-from DCU_TCD_FORGe_WebNLG23.code.GA_inflect import run_GA_morphGen
+from FORGe.WikipediaPage_Generator.code.queryDBpediaProps import get_dbpedia_properties
+from FORGe.WikipediaPage_Generator.code.utils import get_prop_index_from_table, removeReservedCharsFileName, create_xml, create_GPT_Prompt, create_jsons_SubjAndObj, prepare_variables_xml2CoNLL_conversion, clear_folder, clear_files, count_expected_texts, check_postProcessed_outputs, concatenate_files
+from FORGe.DCU_TCD_FORGe_WebNLG23.code.GA_inflect import run_GA_morphGen
 
 
 ###################### START A- What needs to come from outside of the main function that calls FORGe
