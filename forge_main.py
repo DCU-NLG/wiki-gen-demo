@@ -27,9 +27,14 @@ triple_source = 'Ontology' #['Ontology', 'Infobox']
 # Also look for "### INPUT NEEDED:" lines in the codes below
 ###################### END A- Arguments to pass to the function that runs FORGe
 
-###################### START B- What goes inside the main function that calls FORGe
+def setParametersGeneral(entity_name, input_category='Unknown', language='EN', triple_source='Ontology', ignore_properties='width, title'):
+  entity_name = ('_').join(entity_name.split(' '))
+  group_modules_prm = 'yes'
+  split = 'test'
+  return entity_name, language, input_category, triple_source, ignore_properties, group_modules_prm, split
+    
 def run_FORGe(root_folder, entity_name, language, category, triple_source, ignore_properties, group_modules_prm, split, triple2predArg, triple2Conll_jar, morph_folder_name, morph_input_folder, morph_output_folder, props_list_path):
-  ########### START B1- Generation parameters
+  ############### Generation parameters
   # Modules to run, with type of processing (FORGe, Model1, SimpleNLG, etc.).
   # Only FORGe is supported for this prototype version.
   PredArg_Normalisation = 'FORGe'
@@ -78,15 +83,8 @@ def run_FORGe(root_folder, entity_name, language, category, triple_source, ignor
   temp_input_folder_morph = os.path.join(root_folder, 'FORGe-out')
   if not os.path.exists(temp_input_folder_morph):
     os.makedirs(temp_input_folder_morph)
-  ########### END B1- Generation parameters
   
-  ########### START B2- Calls to local and imported functions
-  def setParametersGeneral(entity_name, input_category='Unknown', language='EN', triple_source='Ontology', ignore_properties='width, title'):
-    entity_name = ('_').join(entity_name.split(' '))
-    group_modules_prm = 'yes'
-    split = 'test'
-    return entity_name, language, input_category, triple_source, ignore_properties, group_modules_prm, split
-    
+  ############### Calls to local and imported functions    
   # Set variables for general parameters
   entity_name, language, input_category, triple_source, ignore_properties, group_modules_prm, split = setParametersGeneral(entity_name, category, language, triple_source)
   
@@ -170,6 +168,3 @@ def run_FORGe(root_folder, entity_name, language, category, triple_source, ignor
   check_postProcessed_outputs(root_folder, prefinal_output_folder, count_strs_all_FORGe)
   # Concatenate files
   filename = concatenate_files(root_folder, morph_output_folder, temp_input_folder_morph, split, language, count_strs_all_FORGe)
-  ########### END B2- Calls to local and imported functions
-
-###################### END B- What goes inside the main function that calls FORGe
