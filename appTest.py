@@ -142,7 +142,7 @@ triple2predArg, triple2Conll_jar, morph_folder_name, morph_input_folder, morph_o
 entity_name, language, input_category, triple_source, ignore_properties, group_modules_prm, split = setParametersGeneral(entity_name, category, language, triple_source)
 
 # Query DBpedia
-print('Querying DBpedia for information relatied to the selected entity...')
+print('Querying DBpedia for information related to the selected entity...')
 list_triple_objects, list_propObj, list_obj = get_dbpedia_properties(props_list_path, entity_name, triple_source, ignore_properties)
 # What you want to use for selection is list_propObj, and get a list of IDs that we can use to select the corresponding triple object
 
@@ -205,7 +205,8 @@ if language == 'GA':
 show_input = False #@param {type:"boolean"}
 if language == 'GA':
   print('Inflecting Irish text with Irish NLP tools...')
-  run_GA_morphGen(root_folder, morph_folder_name, morph_input_folder, morph_output_folder, count_strs_all_FORGe, show_input)
+  full_morph_folder_path = os.path.join(root_folder, morph_folder_name)
+  run_GA_morphGen(root_folder, full_morph_folder_path, morph_input_folder, morph_output_folder, count_strs_all_FORGe, show_input)
 
 print('Post-processing text...')
 # Post-process output
