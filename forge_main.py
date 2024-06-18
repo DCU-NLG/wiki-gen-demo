@@ -130,7 +130,7 @@ def run_FORGe(root_folder, entity_name, language, category, triple_source, tripl
   shutil.copy(os.path.join(path_t2p_out, newEntityName+'_'+language_t2p+'.conll'), str_PredArg_folder)
   
   # Convert linguistic structures into English text or non-inflected Irish text (FORGe generator)
-  # print('Generating text with FORGe...')
+  print('Generating text with FORGe...')
   subprocess.run(['python', path_MFleNS, language, split, group_modules_prm, PredArg_Normalisation, PredArg_AggregationMark, PredArg_Aggregation, PredArg_PoSTagging, PredArg_CommStructuring, DSynt_Structuring, SSynt_Structuring, SSynt_Aggregation, RE_Generation, DMorph_AgreementsLinearisation, SMorph_Processing, FORGe_input_folder, path_MATE, path_props_resources_template, path_props_levels, path_props, str_PredArg_folder, str_PredArgNorm_folder, str_PredArgAggMark_folder, str_PredArgAgg_folder, str_PredArgPoS_folder, str_PredArgComm_folder, str_DSynt_folder, str_SSynt_folder, str_SSyntAgg_folder, str_REG_folder, str_DMorphLin_folder, str_SMorphText_folder, log_folder])
   # Check outputs
   subprocess.run(['python', path_checkOutputs, str_PredArg_folder, str_SMorphText_folder, log_folder, temp_input_folder_morph, language])
