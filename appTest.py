@@ -19,7 +19,8 @@ from DCU_TCD_FORGe_WebNLG23.code.GA_inflect import run_GA_morphGen
 
 
 ###################### START A- What needs to come from outside of the main function that calls FORGe
-root_folder = os.path.join('/content', 'webnlg_demo')
+#root_folder = os.path.join('/content', 'webnlg_demo')
+root_folder = os.path.join(os.getcwd(),'forge') # CT changed this
 entity_name = 'Titanic'
 category = 'MeanOfTransportation' #['Unknown', 'Airport', 'Artist', 'Astronaut', 'Athlete', 'Building', 'CelestialBody', 'City', 'ComicsCharacter', 'Company', 'Film', 'Food', 'MeanOfTransportation', 'Monument', 'MusicalWork', 'Politician', 'Scientist', 'SportsTeam', 'University', 'WrittenWork']
 language = 'EN' #['EN, 'GA']
