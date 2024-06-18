@@ -33,7 +33,7 @@ def setParametersGeneral(entity_name, input_category='Unknown', language='EN', t
   split = 'test'
   return entity_name, language, input_category, triple_source, ignore_properties, group_modules_prm, split
     
-def run_FORGe(root_folder, entity_name, language, category, triple_source, ignore_properties, group_modules_prm, split, triple2predArg, triple2Conll_jar, morph_folder_name, morph_input_folder, morph_output_folder, props_list_path):
+def run_FORGe(root_folder, entity_name, language, category, triple_source, triple2predArg, triple2Conll_jar, morph_folder_name, morph_input_folder, morph_output_folder, props_list_path):
   ############### Generation parameters
   # Modules to run, with type of processing (FORGe, Model1, SimpleNLG, etc.).
   # Only FORGe is supported for this prototype version.
