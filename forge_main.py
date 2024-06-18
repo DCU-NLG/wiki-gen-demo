@@ -112,7 +112,8 @@ def run_FORGe(root_folder, entity_name, language, category, triple_source, tripl
   # create xml file and retrieve the list of triples in a text format to build a ChatGPT query, saved in GPT_prompt_{entity}.txt on the left
   list_triples_text = create_xml(list_triple_objects, properties_selected_by_user, input_category, triple2predArg)
   # Create a text file that contains a prompt that can be used to produce another version of the current text with GPT.
-  create_GPT_Prompt(entity_name, language, list_triples_text)
+  dest_path_prompt = os.path.join(temp_input_folder_morph, 'prompts')
+  create_GPT_Prompt(entity_name, language, list_triples_text, dest_path_prompt)
   
   # Get and write class and gender information from DBpedia
   filepath_subj, filepath_obj = create_jsons_SubjAndObj(entity_name, list_obj, triple2predArg)
@@ -167,4 +168,5 @@ def run_FORGe(root_folder, entity_name, language, category, triple_source, tripl
   # Check post-processed texts
   check_postProcessed_outputs(root_folder, prefinal_output_folder, count_strs_all_FORGe)
   # Concatenate files
-  filename = concatenate_files(root_folder, morph_output_folder, temp_input_folder_morph, split, language, count_strs_all_FORGe)
+  dest_path_final = os.path.join(temp_input_folder_morph, 'texts')
+  filename = concatenate_files_UI(root_folder, morph_output_folder, temp_input_folder_morph, split, language, count_strs_all_FORGe, entity_name, dest_path_final)
