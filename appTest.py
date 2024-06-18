@@ -19,7 +19,7 @@ from DCU_TCD_FORGe_WebNLG23.code.GA_inflect import run_GA_morphGen
 
 
 ###################### START A- What needs to come from outside of the main function that calls FORGe
-#root_folder = os.path.join('/content', 'webnlg_demo')
+#root_folder = os.path.join('/content', 'webnlg_demo', 'FORGe')
 root_folder = os.path.join(os.getcwd(),'forge') # CT changed this
 entity_name = 'Titanic'
 category = 'MeanOfTransportation' #['Unknown', 'Airport', 'Artist', 'Astronaut', 'Athlete', 'Building', 'CelestialBody', 'City', 'ComicsCharacter', 'Company', 'Film', 'Food', 'MeanOfTransportation', 'Monument', 'MusicalWork', 'Politician', 'Scientist', 'SportsTeam', 'University', 'WrittenWork']
@@ -107,7 +107,8 @@ def prepare_repo_ruleBased(root_folder):
   unzipTo(zipForge, root_folder)
   # Triple2predArg
   triple2predArg = os.path.join(root_folder, 'triples2predArg')
-  os.makedirs(triple2predArg)
+  if not os.path.exists(triple2predArg):
+    os.makedirs(triple2predArg)
   zipPredArg =  os.path.join(root_folder, 'WikipediaPage_Generator', 'code', 'triples2predArg.zip')
   triple2Conll_jar = os.path.join(triple2predArg, 'webNLG_triples2conll.jar')
   unzipTo(zipPredArg, triple2predArg)
@@ -116,8 +117,10 @@ def prepare_repo_ruleBased(root_folder):
   zipMorph = os.path.join(root_folder, 'DCU_TCD_FORGe_WebNLG23', 'code', morph_folder_name+'.zip')
   morph_input_folder = os.path.join(root_folder, morph_folder_name, 'Inputs')
   morph_output_folder = os.path.join(root_folder, morph_folder_name, 'Outputs')
-  os.makedirs(morph_input_folder)
-  os.makedirs(morph_output_folder)
+  if not os.path.exists(morph_input_folder):
+    os.makedirs(morph_input_folder)
+  if not os.path.exists(morph_output_folder):
+    os.makedirs(morph_output_folder)
   unzipTo(zipMorph, root_folder)
   # Make morphology flookup executable
   cmd_morph1 = ["7z", "a",  "-sfx", root_folder+"/"+morph_folder_name+"/flookup.exe", root_folder+"/"+morph_folder_name+"/flookup"]
