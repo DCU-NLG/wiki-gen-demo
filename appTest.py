@@ -3,13 +3,12 @@
 
 import subprocess
 import sys
-def pipInstall(package):
-  subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-# Install SPARQL wrapper
-pipInstall('SPARQLWrapper')
+# def pipInstall(package):
+#   subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+# # Install SPARQL wrapper
+# pipInstall('SPARQLWrapper')
 
 import os
-import zipfile
 import shutil
 import time
 import ipywidgets as widgets
@@ -28,71 +27,6 @@ language = 'EN' #['EN, 'GA']
 triple_source = 'Ontology' #['Ontology', 'Infobox']
 # Also look for "### INPUT NEEDED:" lines in the codes below
 ########### END A1 - Arguments to pass to the functionthat runs FORGe
-
-########### START A2- Local functions that don't need (or shoudn't) be inside the function that calls FORGe
-def unzipTo(path_to_zip_file, directory_to_extract_to):
-  with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
-    zip_ref.extractall(directory_to_extract_to)
-
-def install_java8():
-  cmd_java1 = ["apt-get",  "install", "-y", "openjdk-8-jdk-headless", "-qq", ">", "/dev/null"]
-  subprocess.Popen(cmd_java1, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
-  os.environ["JAVA_HOME"] = "/usr/lib/jvm/java-8-openjdk-amd64"     #set environment variable
-  cmd_java2 = ["update-alternatives", "--set",  "java", "/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java"]
-  subprocess.Popen(cmd_java2, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
-  cmd_java3 = ["java", "-version"]
-  subprocess.check_output(cmd_java3, stderr=subprocess.STDOUT)
-
-def prepare_repo_ruleBased(root_folder):
-  # Unzip components and instantiate paths
-  # FORGe
-  zipForge = os.path.join(root_folder, 'M-FleNS_NLG-Pipeline', 'code', 'FORGe_colab_v4.zip')
-  unzipTo(zipForge, root_folder)
-  # Triple2predArg
-  triple2predArg = os.path.join(root_folder, 'triples2predArg')
-  if not os.path.exists(triple2predArg):
-    os.makedirs(triple2predArg)
-  zipPredArg =  os.path.join(root_folder, 'WikipediaPage_Generator', 'code', 'triples2predArg.zip')
-  triple2Conll_jar = os.path.join(triple2predArg, 'webNLG_triples2conll.jar')
-  unzipTo(zipPredArg, triple2predArg)
-  # Morph
-  morph_folder_name = 'test_irish_morph_gen_v5.0'
-  zipMorph = os.path.join(root_folder, 'DCU_TCD_FORGe_WebNLG23', 'code', morph_folder_name+'.zip')
-  morph_input_folder = os.path.join(root_folder, morph_folder_name, 'Inputs')
-  morph_output_folder = os.path.join(root_folder, morph_folder_name, 'Outputs')
-  if not os.path.exists(morph_input_folder):
-    os.makedirs(morph_input_folder)
-  if not os.path.exists(morph_output_folder):
-    os.makedirs(morph_output_folder)
-  unzipTo(zipMorph, root_folder)
-  # Make morphology flookup executable
-  cmd_morph1 = ["7z", "a",  "-sfx", root_folder+"/"+morph_folder_name+"/flookup.exe", root_folder+"/"+morph_folder_name+"/flookup"]
-  subprocess.Popen(cmd_morph1, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
-  cmd_morph2 = ["chmod",  "755", root_folder+"/"+morph_folder_name+"/flookup"]
-  subprocess.Popen(cmd_morph2, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
-  # IMG
-  zipWikiImg = os.path.join(root_folder, 'WikipediaPage_Generator', 'code', 'wikipedia-images.zip')
-  unzipTo(zipWikiImg, triple2predArg)
-  # Set other paths
-  props_list_path = os.path.join(root_folder, 'DCU_TCD_FORGe_WebNLG23', 'code', 'sorted_properties.txt')
-  
-  return triple2predArg, triple2Conll_jar, morph_folder_name, morph_input_folder, morph_output_folder, props_list_path
-  
-def setParametersGeneral(entity_name, input_category='Unknown', language='EN', triple_source='Ontology', ignore_properties='width, title'):
-  entity_name = ('_').join(entity_name.split(' '))
-  group_modules_prm = 'yes'
-  split = 'test'
-  return entity_name, language, input_category, triple_source, ignore_properties, group_modules_prm, split
-########### END A2- Local functions that don't need (or shoudn't) be inside the function that calls FORGe
-
-########### START A3- Actions to perform only when starting the instance
-def setupEnvironment(root_folder):
-  # Can't get the next function to work; will have to find some other way wherever this code is hosted
-  install_java8()
-  # Prepare repo
-  print('Preparing repo...')
-  triple2predArg, triple2Conll_jar, morph_folder_name, morph_input_folder, morph_output_folder, props_list_path = prepare_repo_ruleBased(root_folder)
-########### END A3- Actions to perform only when starting the instance
 ###################### END A- What needs to come from outside of the main function that calls FORGe
 
 ###################### START B- What goes inside the main function that calls FORGe
@@ -149,6 +83,12 @@ def run_FORGe(root_folder, entity_name, language, category, triple_source, ignor
   ########### END B1- Generation parameters
   
   ########### START B2- Calls to local and imported functions
+  def setParametersGeneral(entity_name, input_category='Unknown', language='EN', triple_source='Ontology', ignore_properties='width, title'):
+    entity_name = ('_').join(entity_name.split(' '))
+    group_modules_prm = 'yes'
+    split = 'test'
+    return entity_name, language, input_category, triple_source, ignore_properties, group_modules_prm, split
+    
   # Set variables for general parameters
   entity_name, language, input_category, triple_source, ignore_properties, group_modules_prm, split = setParametersGeneral(entity_name, category, language, triple_source)
   
