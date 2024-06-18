@@ -56,7 +56,7 @@ FORGe_input_folder = os.path.join(root_folder, 'FORGe', 'buddy_project', 'struct
 path_MATE = os.path.join(root_folder, 'FORGe', 'buddy-patched.jar')
 path_props_resources_template = os.path.join(root_folder, 'FORGe', 'mateColabDrive.properties')
 path_props_levels = os.path.join(root_folder, 'FORGe', 'mateLevels.properties')
-path_props = os.path.join(root_folder, 'FORGe', '/mate.properties')
+path_props = os.path.join(root_folder, 'FORGe', 'mate.properties')
 # Paths to general folders
 # The input structure(s) of the correct type should be placed in the folder that corresponds to the first module called in the next cell
 path_strs = os.path.join(root_folder, 'FORGe', 'structures')
