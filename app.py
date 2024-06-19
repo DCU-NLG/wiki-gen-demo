@@ -34,7 +34,7 @@ def query_triples(entity_name, category, language, data_source):
 	# Get properties for queried entity (see details at the bottom of this cell)
 	list_triple_objects, _list_propObj, _list_obj, _SelectMultiple_object = forge_main.queryDBpediaProperties(props_list_path, input_entity_name, triple_source, ignore_properties)
 
-	return [tuple([x.DBsubj, x.DBprop, x.DBobj]) for x in list_triple_objects]
+	return {i:tuple([x.DBsubj, x.DBprop, x.DBobj]) for i, x in enumerate(list_triple_objects)}
 
 
 
@@ -55,7 +55,7 @@ def forge_generation(triples, args={}):
 	data_source = args["data_source"]
 
 	# The entity name can be extracted from the triples
-	entity_names = [x[0] for x in triples]
+	entity_names = [x[0] for x in triples.values()]
 	assert len(set(entity_names)) == 1
 
 	# Stuff that FORGe needs from the DBPedia Query
@@ -92,10 +92,7 @@ def forge_generation(triples, args={}):
 	)
 
 	# Now that we have run forge, we need to return the text content of the output file
-
-	# TODO - load this from wherever the FORGe generation went
-	# s = "Lorum Ipsum"
-	s = codecs.open(os.path.join(FORGE_ROOT_FOLDER, 'FORGe-out', 'texts', f'{entity_name_}_{input_language}.txt'), 'r', 'utf-8').read().strip()
+	s = codecs.open(os.path.join(FORGE_ROOT_FOLDER, 'FORGe-out', 'texts', f'{entity_name}_{input_language}.txt'), 'r', 'utf-8').read().strip()
 
 	return s
 
@@ -109,14 +106,14 @@ def llm_generation(triples, args={}):
 
 
 
+# @Massi, this can be removed, it just shows how the functions work
+
 test_triples = query_triples(
 	entity_name="Dublin_Airport",
 	category="Airport",
 	language="EN",
 	data_source="Ontology"
 )
-
-pp.pprint(test_triples)
 
 test_generation = forge_generation(
 	test_triples,
@@ -126,6 +123,12 @@ test_generation = forge_generation(
 		"data_source": "Ontology"
 	}
 )
+
+print("Example Generation:")
+pp.pprint(test_triples)
+print("\nSentence:")
+print("\t",test_generation)
+print("----------------\n")
 
 
 
@@ -185,55 +188,27 @@ MODELS = {
 }
 
 
+# Routes for @Rudali
+
+@app.route('/instructions', methods=['GET']) 
+def instructions():
+	return render_template('instructions.html')
+
+@app.route('/references', methods=['GET']) 
+def references():
+	return render_template('references.html')
+
+@app.route('/contact', methods=['GET']) 
+def contact():
+	return render_template('contact.html')
 
 
 
-@app.route('/search', methods=['GET']) 
-def search():
-	return render_template('search.html')
 
-
-
-@app.route('/home', methods=['GET']) 
-def home():
-	return render_template('home.html')
-
-
-
-
-# By placing the <entity_name> here, it will show 
-@app.route('/generate/<model_name>/<language>/<entity_name>', methods=['GET', 'POST']) 
-def generate(model_name, language, entity_name):
-	generate_function = MODELS[model_name]["function"]
-
-	all_triples = format_triples(query_triples(entity_name))
-	pp.pprint(all_triples)
-
-	h = request.form.to_dict()
-	# TODO - find a cleaner way to do this
-	s = "selected_triples["
-	selected_triples = {k[len(s):-1]:("checked" if v == "on" else "") for k,v in h.items() if k[:len(s)] == s}
-	pp.pprint(selected_triples)
-
-	generate_triples = format_triples(selected_triples.keys()).values()
-	pp.pprint(generate_triples)
-
-	# args_string = request.args.get("args_string");
-	args = {}
-
-	generated_text = generate_function(generate_triples, args)
-	pp.pprint(generated_text)
-	
-
-	return render_template(
-		'generate.html',
-		model_name=model_name,
-		entity_name=entity_name,
-		generated_text=generated_text,
-		all_triples=all_triples,
-		selected_triples=selected_triples
-	)
-
+# @Massi, replace this with whatever you want
+@app.route('/generate', methods=['GET', 'POST']) 
+def generate(model_name):
+	pass
 
 
 if __name__ == '__main__': 
