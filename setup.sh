@@ -7,5 +7,6 @@ pip install flask
 pip install pandas
 pip install numpy
 pip install google-api-python-client
+pip install SPARQLWrapper
 
 git submodule update --init --recursive

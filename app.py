@@ -108,8 +108,8 @@ def home():
 
 
 # By placing the <entity_name> here, it will show 
-@app.route('/generate/<model_name>/<entity_name>', methods=['GET', 'POST']) 
-def generate(model_name, entity_name):
+@app.route('/generate/<model_name>/<language>/<entity_name>', methods=['GET', 'POST']) 
+def generate(model_name, language, entity_name):
 	generate_function = MODELS[model_name]["function"]
 
 	all_triples = format_triples(query_triples(entity_name))
