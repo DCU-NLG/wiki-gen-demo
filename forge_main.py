@@ -52,7 +52,7 @@ def queryDBpediaProperties(props_list_path, entity_name, triple_source, ignore_p
   ### END INPUT NEEDED: list of indices of selected triples
   return list_triple_objects, list_propObj, list_obj, selected_properties
     
-def run_FORGe(root_folder, entity_name, language, input_category, group_modules_prm, list_triple_objects, list_obj, selected_properties, triple2predArg, triple2Conll_jar, morph_folder_name, morph_input_folder, morph_output_folder, props_list_path):
+def run_FORGe(root_folder, entity_name, language, input_category, group_modules_prm, split, list_triple_objects, list_obj, selected_properties, triple2predArg, triple2Conll_jar, morph_folder_name, morph_input_folder, morph_output_folder, props_list_path):
   ############### Generation parameters
   # Modules to run, with type of processing (FORGe, Model1, SimpleNLG, etc.).
   # Only FORGe is supported for this prototype version.
