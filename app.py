@@ -3,6 +3,7 @@ app = Flask(__name__)
 
 import json
 import os
+import codecs
 import pprint
 from collections import OrderedDict
 from copy import copy
@@ -81,7 +82,7 @@ def forge_generation(triples, args={}):
 		split,
 		list_triple_objects,
 		list_obj,
-		selected_properties,
+		triple_ids,
 		triple2predArg,
 		triple2Conll_jar,
 		morph_folder_name,
@@ -93,7 +94,8 @@ def forge_generation(triples, args={}):
 	# Now that we have run forge, we need to return the text content of the output file
 
 	# TODO - load this from wherever the FORGe generation went
-	s = "Lorum Ipsum"
+	# s = "Lorum Ipsum"
+	s = codecs.open(os.path.join(FORGE_ROOT_FOLDER, 'FORGe-out', 'texts', f'{entity_name_}_{input_language}.txt'), 'r', 'utf-8').read().strip()
 
 	return s
 
