@@ -30,10 +30,10 @@ def query_triples(entity_name, category, language, data_source):
 	# @Simon, I have changed the below so that the code does not update the above input arguments
 
 	# Set parameters and instantiate variables for parameters
-	_entity_name, _language, _input_category, triple_source, ignore_properties, _group_modules_prm, _split = forge_main.setParametersGeneral(entity_name, category, language, data_source)
+	input_entity_name, _language, _input_category, triple_source, ignore_properties, _group_modules_prm, _split = forge_main.setParametersGeneral(entity_name, category, language, data_source)
 
 	# Get properties for queried entity (see details at the bottom of this cell)
-	list_triple_objects, _list_propObj, _list_obj, _SelectMultiple_object = forge_main.queryDBpediaProperties(props_list_path, entity_name, triple_source, ignore_properties)
+	list_triple_objects, _list_propObj, _list_obj, _SelectMultiple_object = forge_main.queryDBpediaProperties(props_list_path, input_entity_name, triple_source, ignore_properties)
 
 	return [tuple([x.DBsubj, x.DBprop, x.DBobj]) for x in list_triple_objects]
 
@@ -48,8 +48,7 @@ def example_generation(triples, args={}):
 
 
 
-# @Simon, we need to be able to call your generator here
-# Triples is a list of lists
+# All generate functions should take the input triples (list of tuples) and k-v pair args
 def forge_generation(triples, args={}):
 	# @Simon, I have changed the below so that the code does not update the above input arguments
 
@@ -71,11 +70,12 @@ def forge_generation(triples, args={}):
 	class SelectedProps:
 	  def __init__(self, list_propObj):
 	    self.value = list_propObj
+
 	selected_properties = SelectedProps(list_propObj)
 
 	forge_main.run_FORGe(
-		entity_name,
 		FORGE_ROOT_FOLDER,
+		entity_name,
 		input_language,
 		input_category,
 		group_modules_prm,
@@ -101,7 +101,7 @@ def forge_generation(triples, args={}):
 
 
 # @Michela, we need to be able to call your generator here
-# Triples is a list of lists
+# All generate functions should take the input triples (list of tuples) and k-v pair args
 def llm_generation(triples, args={}):
 	return "Lorum Ipsum"
 
