@@ -27,8 +27,6 @@ triple2predArg, triple2Conll_jar, morph_folder_name, morph_input_folder, morph_o
 
 # Returns a list of tuples (subject, predicate, object)
 def query_triples(entity_name, category, language, data_source):
-	# @Simon, I have changed the below so that the code does not update the above input arguments
-
 	# Set parameters and instantiate variables for parameters
 	input_entity_name, _language, _input_category, triple_source, ignore_properties, _group_modules_prm, _split = forge_main.setParametersGeneral(entity_name, category, language, data_source)
 
@@ -48,10 +46,8 @@ def example_generation(triples, args={}):
 
 
 
-# All generate functions should take the input triples (list of tuples) and k-v pair args
+# All generate functions should take the input triples (dict of tuples) and k-v pair args
 def forge_generation(triples, args={}):
-	# @Simon, I have changed the below so that the code does not update the above input arguments
-
 	# Args are passed to this function as below
 	language = args["language"]
 	category = args["category"]
@@ -70,6 +66,9 @@ def forge_generation(triples, args={}):
 	class SelectedProps:
 	  def __init__(self, list_propObj):
 	    self.value = list_propObj
+
+	# @Simon, here
+	triple_ids = list(triples.keys())
 
 	selected_properties = SelectedProps(list_propObj)
 
