@@ -2,9 +2,12 @@ from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
 
 import json
+import os
 import pprint
 from collections import OrderedDict
 from copy import copy
+
+import forge_main
 
 import wget
 
@@ -28,18 +31,52 @@ def example_generation(triples, args={}):
 		sentences.append(f"{triple[0]} {triple[1]} is {triple[2]}")
 	return ".  ".join(sentences) + "."
 
+# @Simon, we need to be able to call your generator here
+# Triples is a list of lists
+def forge_generation(triples, args={}):
+	# Args are passed to this function as below
+	language = args["language"]
+
+	# The entity name can be extracted from the triples
+	entity_names = [x[0] for x in triples]
+	assert len(set(entity_names)) == 1
+
+	# Fixed config variables
+	root_folder = os.path.join(os.getcwd(),'FORGe')
+
+	forge_main.run_FORGe(
+		entity_names[0],
+		root_folder,
+		language,
+		# TODO - all the other stuff
+	)
+
+	# Now that we have run forge, we need to return the text content of the output file
+
+	# TODO - load this from wherever the FORGe generation went
+	s = ""
+
+	return s
 
 
-# @Simon setup your rules-based Java stuff here.
-# - You can load the model and leave it in memory to save loading it on each call
-# - Make a function with the same arguments as my example_generation and add it to MODELS below
-
+# @Michela, we need to be able to call your generator here
+# Triples is a list of lists
+def llm_generation(triples, args={}):
+	pass
 
 
 MODELS = {
 	"example": {
 		"full_name": "Example Triple Generator",
 		"function": example_generation # The name of the function (no parenthesis)
+	},
+	"forge": {
+		"full_name": "FORGe",
+		"function": forge_generation # The name of the function (no parenthesis)
+	},
+	"llm": {
+		"full_name": "TODO",
+		"function":llm_generation # The name of the function (no parenthesis)
 	}
 }
 

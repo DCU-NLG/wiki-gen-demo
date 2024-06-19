@@ -12,9 +12,9 @@ import os
 import shutil
 import time
 import ipywidgets as widgets
-from webnlg_demo.FORGe.WikipediaPage_Generator.code.queryDBpediaProps import get_dbpedia_properties
-from webnlg_demo.FORGe.WikipediaPage_Generator.code.utils import get_prop_index_from_table, removeReservedCharsFileName, create_xml, create_GPT_Prompt, create_jsons_SubjAndObj, prepare_variables_xml2CoNLL_conversion, clear_folder, clear_files, count_expected_texts, check_postProcessed_outputs, concatenate_files_UI
-from webnlg_demo.FORGe.DCU_TCD_FORGe_WebNLG23.code.GA_inflect import run_GA_morphGen
+from FORGe.WikipediaPage_Generator.code.queryDBpediaProps import get_dbpedia_properties
+from FORGe.WikipediaPage_Generator.code.utils import get_prop_index_from_table, removeReservedCharsFileName, create_xml, create_GPT_Prompt, create_jsons_SubjAndObj, prepare_variables_xml2CoNLL_conversion, clear_folder, clear_files, count_expected_texts, check_postProcessed_outputs, concatenate_files_UI
+from FORGe.DCU_TCD_FORGe_WebNLG23.code.GA_inflect import run_GA_morphGen
 
 
 ###################### START A- Arguments to pass to the function that runs FORGe
