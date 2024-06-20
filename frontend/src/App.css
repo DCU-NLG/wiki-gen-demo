@@ -5,3 +5,9 @@
 }
 
 body {padding-bottom: 70px;}
+
+.roomfac {
+    /*display: flex;*/
+    widtH: 80%;
+    margin: auto;
+}

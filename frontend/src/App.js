@@ -11,6 +11,8 @@ import Instructions from './components/Instructions';
 import Contact from './components/Contact';
 import './App.css';
 
+import { Container } from 'react-bootstrap';
+
 function App() {
   const [triples, setTriples] = useState([]);
   const [wikiPage, setWikiPage] = useState({ title: '', content: '' });
@@ -47,7 +49,7 @@ function App() {
   return (
     <Router>
       <NavBar />
-      <div className="container-fluid">
+      <Container fluid className="roomfac">
         <Routes>
           <Route
             path="/"
@@ -64,7 +66,7 @@ function App() {
           {/*default route / protection from unintended navigation */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </div>
+      </Container>
       <Footer />
     </Router>
   );

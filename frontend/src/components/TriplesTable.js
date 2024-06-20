@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, FormCheck } from 'react-bootstrap';
 
-const M = 3; // Local constant for the number of triplets to pre-select
+const M = 5; // Local constant for the number of triplets to pre-select by unique predicate
 
 function TriplesTable({ triples, onGenerate }) {
   const [selectedTriples, setSelectedTriples] = useState([]);
 
   useEffect(() => {
-    // Pre-select the first M unique triplets
-    const uniqueTriples = [...new Set(Object.keys(triples))].slice(0, M);
-    setSelectedTriples(uniqueTriples.map(Number));
+    // Pre-select the first M unique triplets based on unique predicate
+    const uniquePredicates = [];
+    const uniqueTriples = [];
+    for (const [index, [, predicate]] of Object.entries(triples)) {
+      if (!uniquePredicates.includes(predicate) && uniqueTriples.length < M) {
+        uniquePredicates.push(predicate);
+        uniqueTriples.push(Number(index));
+      }
+    }
+    setSelectedTriples(uniqueTriples);
   }, [triples]);
 
   const handleCheckboxChange = (index) => {
