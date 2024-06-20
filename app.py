@@ -221,13 +221,23 @@ def form_data():
 def generate():
     data = request.get_json()
 
+    triples = {i:triple for i, triple in enumerate(data["triplets"])}
+    language = "EN"
+    data_source = "Ontology"
+    model = "forge"
+    category = "Airport"
+
+    generate_function = MODELS[model]["function"]
+
+    args = {
+        "language": language,
+        "data_source": data_source,
+        "category": category,
+    }
+    content = generate_function(triples, args)
+
     # Mocked for now
     title = "Generated Title"
-    content = f"""<p>Lorem ipsum dolor sit amet, consectetur adipisci elit, sed do eiusmod tempor incidunt ut labore 
-    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullamco laboriosam, nisi ut aliquid 
-    ex ea commodi consequatur. Duis aute irure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla 
-    pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est 
-    laborum..\n\n And the data was: {data}</p>"""
     return jsonify({'title': title, 'content': content})
 
 
