@@ -1,0 +1,6 @@
+ipywidgets
+flask
+pandas
+numpy
+google-api-python-client
+SPARQLWrapper
