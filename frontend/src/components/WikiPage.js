@@ -3,7 +3,7 @@ import React from 'react';
 function WikiPage({ title, content }) {
   return (
     <div className="col-md-6" align="center">
-      <div id="resultWindow" className="border rounded p-3">
+      {/*<div id="resultWindow" className="border rounded p-3">*/}
         <div className="card mb-4">
           <div className="card-header bg-white">
             <img
@@ -16,7 +16,7 @@ function WikiPage({ title, content }) {
           </div>
           <div className="card-body" dangerouslySetInnerHTML={{ __html: content }} />
         </div>
-      </div>
+      {/*</div>*/}
     </div>
   );
 }

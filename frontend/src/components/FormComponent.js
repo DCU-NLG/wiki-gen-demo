@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 
-function FormComponent({ onQuery, wikiPage, setWikiPage }) {
+function FormComponent(props) {
+  // unpack props
+  const { onQuery, setWikiPage, wikiPage, showAlert,
+    setShowAlert, alertMessage, setAlertMessage
+  } = props;
+  // states
   const [categories, setCategories] = useState([]);
   const [dataSources, setDataSources] = useState([]);
   const [languages, setLanguages] = useState({});
@@ -47,6 +52,7 @@ function FormComponent({ onQuery, wikiPage, setWikiPage }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setShowAlert(false);
     if (formData.subject.trim()) {
       // reset wikipage on a new search
       if(wikiPage.title !== ''){
@@ -59,53 +65,95 @@ function FormComponent({ onQuery, wikiPage, setWikiPage }) {
         data_source: formData.dataSource
       });
     } else {
-      alert('Subject cannot be empty');
+      setAlertMessage('Subject cannot be empty');
+      setShowAlert(true);
     }
   };
 
   return (
-    <div className="col-md-8">
-      <h1>Seed Wikipedia Generator</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group" style={{ paddingBottom: '15px' }}>
-          <label htmlFor="categorySelect">Select Category:</label>
-          <select className="form-control" id="categorySelect" name="category" value={formData.category} onChange={handleChange}>
-            {categories.map(category => (
-              <option key={category} value={category}>{category}</option>
-            ))}
-          </select>
-        </div>
-        <div className="form-group" style={{ paddingBottom: '15px' }}>
-          <label htmlFor="dataSourceSelect">Select Data Source:</label>
-          <select className="form-control" id="dataSourceSelect" name="dataSource" value={formData.dataSource} onChange={handleChange}>
-            {dataSources.map(dataSource => (
-              <option key={dataSource} value={dataSource}>{dataSource}</option>
-            ))}
-          </select>
-        </div>
-        <div className="form-group" style={{ paddingBottom: '15px' }}>
-          <label htmlFor="languageSelect">Select Language:</label>
-          <select className="form-control" id="languageSelect" name="language" value={formData.language} onChange={handleChange}>
-            {Object.entries(languages).map(([code, name]) => (
-              <option key={code} value={code}>{name}</option>
-            ))}
-          </select>
-        </div>
-        <div className="form-group" style={{ paddingBottom: '15px' }}>
-          <label htmlFor="modelSelect">Select Model:</label>
-          <select className="form-control" id="modelSelect" name="model" value={formData.model} onChange={handleChange}>
-            {Object.entries(models).map(([key, value]) => (
-              <option key={key} value={key}>{value}</option>
-            ))}
-          </select>
-        </div>
-        <div className="form-group" style={{ paddingBottom: '15px' }}>
-          <label htmlFor="subjectInput">Subject:</label>
-          <input type="text" className="form-control" id="subjectInput" name="subject" value={formData.subject} onChange={handleChange} />
-        </div>
-        <button type="submit" className="btn btn-primary">Query</button>
-      </form>
-    </div>
+    <Container>
+      <Row>
+        <Col md={6}>
+          <h2>Generate Wikipedia-like Page</h2>
+          {showAlert && <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>{alertMessage}</Alert>}
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="categorySelect" className="mb-3">
+              <Form.Label>Select Category:</Form.Label>
+              <Form.Control
+                as="select"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+              >
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+            <Form.Group controlId="dataSourceSelect" className="mb-3">
+              <Form.Label>Select Data Source:</Form.Label>
+              <Form.Control
+                as="select"
+                name="dataSource"
+                value={formData.dataSource}
+                onChange={handleChange}
+              >
+                {dataSources.map((dataSource) => (
+                  <option key={dataSource} value={dataSource}>
+                    {dataSource}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+            <Form.Group controlId="languageSelect" className="mb-3">
+              <Form.Label>Select Language:</Form.Label>
+              <Form.Control
+                as="select"
+                name="language"
+                value={formData.language}
+                onChange={handleChange}
+              >
+                {Object.entries(languages).map(([code, name]) => (
+                  <option key={code} value={code}>
+                    {name}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+            <Form.Group controlId="modelSelect" className="mb-3">
+              <Form.Label>Select Model:</Form.Label>
+              <Form.Control
+                as="select"
+                name="model"
+                value={formData.model}
+                onChange={handleChange}
+              >
+                {Object.entries(models).map(([key, value]) => (
+                  <option key={key} value={key}>
+                    {value}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+            <Form.Group controlId="subjectInput" className="mb-3">
+              <Form.Label>Subject:</Form.Label>
+              <Form.Control
+                type="text"
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
+                placeholder="Enter the subject"
+              />
+            </Form.Group>
+            <Button variant="primary" type="submit">
+              Query
+            </Button>
+          </Form>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

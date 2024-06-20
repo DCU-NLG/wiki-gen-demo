@@ -18,11 +18,19 @@ function App() {
   const [wikiPage, setWikiPage] = useState({ title: '', content: '' });
   const [formData, setFormData] = useState(null);
 
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+
   const handleQuery = async (data) => {
     setFormData(data); // Store form data for later use
     try {
       const response = await axios.post('http://127.0.0.1:5000/query-triples', data);
+      if (Object.keys(response.data).length === 0){
+        setShowAlert(true);
+        setAlertMessage("Unfortunately, no entity matching the subject was found");
+      }
       setTriples(response.data);
+      console.log("######" , response.data)
     } catch (error) {
       console.error('Error querying triples:', error);
     }
@@ -49,13 +57,15 @@ function App() {
   return (
     <Router>
       <NavBar />
-      <Container fluid className="roomfac">
+      <Container fluid className="app-container">
         <Routes>
           <Route
             path="/"
             element={
               <div className="row">
-                <FormComponent onQuery={handleQuery} wikiPage={wikiPage} setWikiPage={setWikiPage}/>
+                <FormComponent onQuery={handleQuery} wikiPage={wikiPage} setWikiPage={setWikiPage}
+                               showAlert={showAlert} setShowAlert={setShowAlert} alertMessage={alertMessage}
+                               setAlertMessage={setAlertMessage}/>
                 {Object.keys(triples).length > 0 && <TriplesTable triples={triples} onGenerate={handleGenerate} />}
                 {wikiPage.title && <WikiPage title={wikiPage.title} content={wikiPage.content} />}
               </div>
