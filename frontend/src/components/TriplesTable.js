@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState, useEffect } from 'react';
+import { Table, Button, FormCheck } from 'react-bootstrap';
+
+const M = 3; // Local constant for the number of triplets to pre-select
 
 function TriplesTable({ triples, onGenerate }) {
   const [selectedTriples, setSelectedTriples] = useState([]);
+
+  useEffect(() => {
+    // Pre-select the first M unique triplets
+    const uniqueTriples = [...new Set(Object.keys(triples))].slice(0, M);
+    setSelectedTriples(uniqueTriples.map(Number));
+  }, [triples]);
 
   const handleCheckboxChange = (index) => {
     const updatedSelection = selectedTriples.includes(index)
@@ -19,7 +27,7 @@ function TriplesTable({ triples, onGenerate }) {
   return (
     <div className="col-md-6 mt-4">
       <h2>Triples</h2>
-      <table className="table table-bordered">
+      <Table bordered>
         <thead>
           <tr>
             <th scope="col">Select</th>
@@ -32,7 +40,7 @@ function TriplesTable({ triples, onGenerate }) {
           {Object.entries(triples).map(([index, [subject, predicate, object]]) => (
             <tr key={index}>
               <td>
-                <input
+                <FormCheck
                   type="checkbox"
                   checked={selectedTriples.includes(Number(index))}
                   onChange={() => handleCheckboxChange(Number(index))}
@@ -44,15 +52,11 @@ function TriplesTable({ triples, onGenerate }) {
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
       {selectedTriples.length > 0 && (
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={handleGenerateClick}
-        >
+        <Button variant="primary" onClick={handleGenerateClick}>
           Generate
-        </button>
+        </Button>
       )}
     </div>
   );

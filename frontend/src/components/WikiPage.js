@@ -12,7 +12,7 @@ function WikiPage({ title, content }) {
               className="mr-2"
               style={{ height: '30px' }}
             />
-            <span className="h5 font-weight-bold">{title}</span>
+            <span className="h5 font-weight-bold">&nbsp;&nbsp;{title}</span>
           </div>
           <div className="card-body" dangerouslySetInnerHTML={{ __html: content }} />
         </div>
