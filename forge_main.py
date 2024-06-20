@@ -27,7 +27,7 @@ from FORGe.DCU_TCD_FORGe_WebNLG23.code.GA_inflect import run_GA_morphGen
 ###################### END A- Arguments to pass to the function that runs FORGe
 
 def setParametersGeneral(entity_name, input_category='Unknown', language='EN', triple_source='Ontology', ignore_properties='width, title'):
-  entity_name = ('_').join(entity_name.split(' '))
+  entity_name = ('_').join([ent_comp.capitalize() for ent_comp in entity_name.split(' ')])
   group_modules_prm = 'yes'
   split = 'test'
   return entity_name, language, input_category, triple_source, ignore_properties, group_modules_prm, split
