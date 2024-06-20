@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import FormComponent from './components/FormComponent';
 import TriplesTable from './components/TriplesTable';
@@ -29,8 +29,15 @@ function App() {
   const handleGenerate = async (selectedTriples) => {
     if (formData) {
       try {
-        const response = await axios.post('http://127.0.0.1:5000/generate', { model_name: formData.model, triplets: selectedTriples });
-        setWikiPage({ title: response.data.title, content: response.data.content });
+        const response = await axios.post(
+            'http://127.0.0.1:5000/generate',
+            { model_name: formData.model, triplets: selectedTriples }
+        );
+
+        setWikiPage({
+          title: response.data.title,
+          content: response.data.content
+        });
       } catch (error) {
         console.error('Error generating content:', error);
       }
@@ -54,6 +61,8 @@ function App() {
           />
           <Route path="/instructions" element={<Instructions />} />
           <Route path="/contact" element={<Contact />} />
+          {/*default route / protection from unintended navigation */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
       <Footer />
