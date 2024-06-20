@@ -1,20 +1,16 @@
-from flask import Flask, render_template, request, jsonify, redirect
+"""Simple flask server"""
+from typing import Dict, List, Tuple, Any
+from flask import Flask, request, jsonify
 from flask_cors import CORS
-
-app = Flask(__name__)
-CORS(app)  # This will allow all origins by default
-
 import os
 import codecs
-import pprint
-
 
 # Simon's FORGe system
 import forge_main
 import setup_repo
 
-# Setup the pretty printer
-pp = pprint.PrettyPrinter(indent=4)
+app = Flask(__name__)
+CORS(app)  # This will allow all origins by default
 
 FORGE_ROOT_FOLDER = os.path.join(os.getcwd(), 'FORGe')
 
@@ -45,7 +41,7 @@ def query_triples():
 
 
 # All generate functions should take the input triples (list of lists) and k-v pair args
-def example_generation(triples, args={}):
+def example_generation(triples, args: Dict[str, Any] = None):
     sentences = []
     for triple in triples:
         sentences.append(f"{triple[0]} {triple[1]} is {triple[2]}")
@@ -53,7 +49,7 @@ def example_generation(triples, args={}):
 
 
 # All generate functions should take the input triples (dict of tuples) and k-v pair args
-def forge_generation(triples, args={}):
+def forge_generation(triples, args: Dict[str, Any] = None):
     # Args are passed to this function as below
     language = args["language"]
     category = args["category"]
@@ -107,7 +103,7 @@ def forge_generation(triples, args={}):
 
 # @Michela, we need to be able to call your generator here
 # All generate functions should take the input triples (list of tuples) and k-v pair args
-def llm_generation(triples, args={}):
+def llm_generation(triples, args: Dict[str, Any] = None):
     return "Lorum Ipsum"
 
 
@@ -203,33 +199,35 @@ def form_data():
 #     return redirect('/generate')
 
 
-# Routes for @Rudali
-
-@app.route('/instructions', methods=['GET'])
-def instructions():
-    return render_template('instructions.html')
-
-
-@app.route('/references', methods=['GET'])
-def references():
-    return render_template('references.html')
-
-
-@app.route('/contact', methods=['GET'])
-def contact():
-    return render_template('contact.html')
+# @Rudali ---> please go under frontned/src/components and fill the react components with
+# the html you wanted to include
+# @app.route('/instructions', methods=['GET'])
+# def instructions():
+#     return render_template('instructions.html')
+#
+#
+# @app.route('/references', methods=['GET'])
+# def references():
+#     return render_template('references.html')
+#
+#
+# @app.route('/contact', methods=['GET'])
+# def contact():
+#     return render_template('contact.html')
 
 
 # @Massi, replace this with whatever you want
-@app.route('/generate', methods=['GET', 'POST'])
+@app.route('/generate', methods=['POST'])
 def generate():
+    data = request.get_json()
+
     # Mocked for now
     title = "Generated Title"
-    content = """<p>Lorem ipsum dolor sit amet, consectetur adipisci elit, sed do eiusmod tempor incidunt ut labore 
+    content = f"""<p>Lorem ipsum dolor sit amet, consectetur adipisci elit, sed do eiusmod tempor incidunt ut labore 
     et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullamco laboriosam, nisi ut aliquid 
     ex ea commodi consequatur. Duis aute irure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla 
     pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est 
-    laborum..</p>"""
+    laborum..\n\n And the data was: {data}</p>"""
     return jsonify({'title': title, 'content': content})
 
 
