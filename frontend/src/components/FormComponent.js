@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 
 function FormComponent(props) {
+    const base_url = process.env.REACT_APP_BACKEND_BASE_ENDPOINT;
+
   // unpack props
   const { onQuery, setWikiPage, wikiPage, showAlert,
     setShowAlert, alertMessage, setAlertMessage
@@ -23,7 +25,7 @@ function FormComponent(props) {
   useEffect(() => {
     async function fetchFormData() {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/form-data');
+        const response = await axios.get(`${base_url}/form-data`);
         setCategories(response.data.categories);
         setDataSources(response.data.data_sources);
         setLanguages(response.data.languages);

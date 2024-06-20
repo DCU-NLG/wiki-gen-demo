@@ -11,9 +11,11 @@ import Instructions from './components/Instructions';
 import Contact from './components/Contact';
 import './App.css';
 
-import { Container } from 'react-bootstrap';
+import { Container, Row } from 'react-bootstrap';
 
 function App() {
+  const base_url = process.env.REACT_APP_BACKEND_BASE_ENDPOINT;
+
   const [triples, setTriples] = useState([]);
   const [wikiPage, setWikiPage] = useState({ title: '', content: '' });
   const [formData, setFormData] = useState(null);
@@ -24,13 +26,12 @@ function App() {
   const handleQuery = async (data) => {
     setFormData(data); // Store form data for later use
     try {
-      const response = await axios.post('http://127.0.0.1:5000/query-triples', data);
+      const response = await axios.post(`${base_url}/query-triples`, data);
       if (Object.keys(response.data).length === 0){
         setShowAlert(true);
         setAlertMessage("Unfortunately, no entity matching the subject was found");
       }
       setTriples(response.data);
-      console.log("######" , response.data)
     } catch (error) {
       console.error('Error querying triples:', error);
     }
@@ -40,7 +41,7 @@ function App() {
     if (formData) {
       try {
         const response = await axios.post(
-            'http://127.0.0.1:5000/generate',
+            `${base_url}/generate`,
             { model_name: formData.model, triplets: selectedTriples }
         );
 
@@ -62,13 +63,13 @@ function App() {
           <Route
             path="/"
             element={
-              <div className="row">
-                <FormComponent onQuery={handleQuery} wikiPage={wikiPage} setWikiPage={setWikiPage}
-                               showAlert={showAlert} setShowAlert={setShowAlert} alertMessage={alertMessage}
-                               setAlertMessage={setAlertMessage}/>
-                {Object.keys(triples).length > 0 && <TriplesTable triples={triples} onGenerate={handleGenerate} />}
-                {wikiPage.title && <WikiPage title={wikiPage.title} content={wikiPage.content} />}
-              </div>
+              <Row>
+                  <FormComponent onQuery={handleQuery} wikiPage={wikiPage} setWikiPage={setWikiPage}
+                                 showAlert={showAlert} setShowAlert={setShowAlert} alertMessage={alertMessage}
+                                 setAlertMessage={setAlertMessage}/>
+                  {Object.keys(triples).length > 0 && <TriplesTable triples={triples} onGenerate={handleGenerate} />}
+                  {wikiPage.title && <WikiPage title={wikiPage.title} content={wikiPage.content} />}
+              </Row>
             }
           />
           <Route path="/instructions" element={<Instructions />} />
