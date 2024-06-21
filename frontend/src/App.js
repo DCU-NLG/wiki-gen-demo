@@ -48,8 +48,10 @@ function App() {
         const response = await axios.post(
             `${base_url}/generate`,
             {
-              model_name: formData.model,
+              model: formData.model,
               language: formData.language,
+              dataSource: formData.dataSource,
+              category: formData.category,
               triplets: selectedTriples
             }
         );

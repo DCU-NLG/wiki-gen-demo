@@ -3,31 +3,35 @@ import { Table, Button, FormCheck } from 'react-bootstrap';
 
 function TriplesTable({ triples, onGenerate }) {
   const M = process.env.REACT_APP_N_PRESELECT_TRIPLES; // Number of triplets to pre-select by unique predicate
-  const [selectedTriples, setSelectedTriples] = useState([]);
+  const [selectedTriples, setSelectedTriples] = useState({});
 
   useEffect(() => {
     // Pre-select the first M unique triplets based on unique predicate
     const uniquePredicates = [];
-    const uniqueTriples = [];
-    for (const [index, [, predicate]] of Object.entries(triples)) {
-      if (!uniquePredicates.includes(predicate) && uniqueTriples.length < M) {
+    const uniqueTriples = {};
+    let count = 0;
+    for (const [index, [subject, predicate, object]] of Object.entries(triples)) {
+      if (!uniquePredicates.includes(predicate) && count < M) {
         uniquePredicates.push(predicate);
-        uniqueTriples.push(Number(index));
+        uniqueTriples[index] = [subject, predicate, object];
+        count++;
       }
     }
     setSelectedTriples(uniqueTriples);
   }, [triples]);
 
   const handleCheckboxChange = (index) => {
-    const updatedSelection = selectedTriples.includes(index)
-      ? selectedTriples.filter(i => i !== index)
-      : [...selectedTriples, index];
+    const updatedSelection = { ...selectedTriples };
+    if (updatedSelection[index]) {
+      delete updatedSelection[index];
+    } else {
+      updatedSelection[index] = triples[index];
+    }
     setSelectedTriples(updatedSelection);
   };
 
   const handleGenerateClick = () => {
-    const selected = selectedTriples.map(index => triples[index]);
-    onGenerate(selected);
+    onGenerate(selectedTriples);
   };
 
   return (
@@ -48,8 +52,8 @@ function TriplesTable({ triples, onGenerate }) {
               <td>
                 <FormCheck
                   type="checkbox"
-                  checked={selectedTriples.includes(Number(index))}
-                  onChange={() => handleCheckboxChange(Number(index))}
+                  checked={selectedTriples.hasOwnProperty(index)}
+                  onChange={() => handleCheckboxChange(index)}
                 />
               </td>
               <td>{subject}</td>
@@ -59,7 +63,7 @@ function TriplesTable({ triples, onGenerate }) {
           ))}
         </tbody>
       </Table>
-      {selectedTriples.length > 0 && (
+      {Object.keys(selectedTriples).length > 0 && (
         <Button variant="primary" onClick={handleGenerateClick}>
           Generate
         </Button>
