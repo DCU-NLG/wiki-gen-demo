@@ -9,3 +9,5 @@ FORGe/*
 
 # misc
 .DS_Store
+
+LLM/env_variables.env

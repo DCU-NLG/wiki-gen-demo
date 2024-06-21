@@ -9,6 +9,9 @@ import codecs
 import forge_main
 import setup_repo
 
+# Michela's LLM system
+import llm_main
+
 app = Flask(__name__)
 CORS(app)  # This will allow all origins by default
 
@@ -104,7 +107,9 @@ def forge_generation(triples, args: Dict[str, Any] = None):
 # @Michela, we need to be able to call your generator here
 # All generate functions should take the input triples (list of tuples) and k-v pair args
 def llm_generation(triples, args: Dict[str, Any] = None):
-    return "Lorum Ipsum"
+    llm_triples = [f"{triple[0]} | {triple[1]} | {triple[2]}" for triple in triples.values()]
+    output = llm_main.GPT35_MODEL.generate_api(llm_triples, language=args['language'], prompt_type='zero_shot')
+    return output
 
 
 # @Massi, this can be removed, it just shows how the functions work
