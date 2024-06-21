@@ -108,7 +108,7 @@ def forge_generation(triples, args: Dict[str, Any] = None):
 # All generate functions should take the input triples (list of tuples) and k-v pair args
 def llm_generation(triples, args: Dict[str, Any] = None):
     llm_triples = [f"{triple[0]} | {triple[1]} | {triple[2]}" for triple in triples.values()]
-    output = llm_main.GPT35_MODEL.generate_api(llm_triples, language=args['language'], prompt_type='zero_shot')
+    output = llm_main.GPT35_MODEL.generate_api(llm_triples, language=args['language'], prompt_type='few_shot')
     return output
 
 

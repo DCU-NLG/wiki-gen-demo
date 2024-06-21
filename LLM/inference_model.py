@@ -50,6 +50,8 @@ class PretrainedModel:
                                                                     i=i+1, target=example['target'][lan]) 
                                                                     for i, example in enumerate(examples)]
             
+            examples = self.hyperparameters['few_shot']['examples_divider'].join(examples)
+            
             return self.hyperparameters['few_shot']['instruction'].format(triples=preprocess_triples(sample, 
                                                                                             triples_div=self.hyperparameters['triples_div']), 
                                                                     language=self.lan2text[lan], 
