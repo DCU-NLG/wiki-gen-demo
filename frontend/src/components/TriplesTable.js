@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, FormCheck } from 'react-bootstrap';
 
-const M = process.env.REACT_APP_N_PRESELECT_TRIPLES; // Number of triplets to pre-select by unique predicate
-console.log("########### ", M);
 function TriplesTable({ triples, onGenerate }) {
+  const M = process.env.REACT_APP_N_PRESELECT_TRIPLES; // Number of triplets to pre-select by unique predicate
   const [selectedTriples, setSelectedTriples] = useState([]);
 
   useEffect(() => {

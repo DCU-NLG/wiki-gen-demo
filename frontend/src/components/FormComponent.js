@@ -6,21 +6,18 @@ function FormComponent(props) {
     const base_url = process.env.REACT_APP_BACKEND_BASE_ENDPOINT;
 
   // unpack props
-  const { onQuery, setWikiPage, wikiPage, showAlert,
-    setShowAlert, alertMessage, setAlertMessage
+  const { onQuery,
+    wikiPage, setWikiPage,
+    formData, setFormData,
+    showAlert, setShowAlert,
+    alertMessage, setAlertMessage
   } = props;
   // states
   const [categories, setCategories] = useState([]);
   const [dataSources, setDataSources] = useState([]);
   const [languages, setLanguages] = useState({});
   const [models, setModels] = useState([]);
-  const [formData, setFormData] = useState({
-    category: '',
-    dataSource: '',
-    language: '',
-    model: '',
-    subject: ''
-  });
+
 
   useEffect(() => {
     async function fetchFormData() {
@@ -64,7 +61,7 @@ function FormComponent(props) {
         entity_name: formData.subject,
         category: formData.category,
         language: formData.language,
-        data_source: formData.dataSource
+        data_source: formData.dataSource,
       });
     } else {
       setAlertMessage('Subject cannot be empty');
@@ -132,9 +129,9 @@ function FormComponent(props) {
                 value={formData.model}
                 onChange={handleChange}
               >
-                {Object.entries(models).map(([key, value]) => (
-                  <option key={key} value={key}>
-                    {value}
+                {models.map((model) => (
+                  <option key={model} value={model}>
+                    {model}
                   </option>
                 ))}
               </Form.Control>

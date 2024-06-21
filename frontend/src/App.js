@@ -18,13 +18,18 @@ function App() {
 
   const [triples, setTriples] = useState([]);
   const [wikiPage, setWikiPage] = useState({ title: '', content: '' });
-  const [formData, setFormData] = useState(null);
-
+  const [formData, setFormData] = useState({
+    category: '',
+    dataSource: '',
+    language: '',
+    model: '',
+    subject: ''
+  });
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
 
   const handleQuery = async (data) => {
-    setFormData(data); // Store form data for later use
+    //setFormData(data); // Store form data for later use
     try {
       const response = await axios.post(`${base_url}/query-triples`, data);
       if (Object.keys(response.data).length === 0){
@@ -42,7 +47,11 @@ function App() {
       try {
         const response = await axios.post(
             `${base_url}/generate`,
-            { model_name: formData.model, triplets: selectedTriples }
+            {
+              model_name: formData.model,
+              language: formData.language,
+              triplets: selectedTriples
+            }
         );
 
         setWikiPage({
@@ -64,9 +73,11 @@ function App() {
             path="/"
             element={
               <Row>
-                  <FormComponent onQuery={handleQuery} wikiPage={wikiPage} setWikiPage={setWikiPage}
-                                 showAlert={showAlert} setShowAlert={setShowAlert} alertMessage={alertMessage}
-                                 setAlertMessage={setAlertMessage}/>
+                  <FormComponent onQuery={handleQuery}
+                                 wikiPage={wikiPage} setWikiPage={setWikiPage}
+                                 formData={formData} setFormData={setFormData}
+                                 showAlert={showAlert} setShowAlert={setShowAlert}
+                                 alertMessage={alertMessage} setAlertMessage={setAlertMessage}/>
                   {Object.keys(triples).length > 0 && <TriplesTable triples={triples} onGenerate={handleGenerate} />}
                   {wikiPage.title && <WikiPage title={wikiPage.title} content={wikiPage.content} />}
               </Row>
