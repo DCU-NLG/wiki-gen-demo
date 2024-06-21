@@ -189,7 +189,7 @@ def form_data():
         'categories': CATEGORIES,
         'data_sources': DATA_SOURCES,
         'languages': LANGUAGES,
-        'models': [value['full_name'] for value in MODELS.values()]
+        'models': {k: v["full_name"] for (k, v) in MODELS.items()},
     })
 
 # Error handler for 404 errors
@@ -216,7 +216,6 @@ def form_data():
 #     return render_template('contact.html')
 
 
-# @Massi, replace this with whatever you want
 @app.route('/generate', methods=['POST'])
 def generate():
     data = request.get_json()

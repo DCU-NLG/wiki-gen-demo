@@ -3,21 +3,20 @@ import axios from 'axios';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 
 function FormComponent(props) {
-    const base_url = process.env.REACT_APP_BACKEND_BASE_ENDPOINT;
+  const base_url = process.env.REACT_APP_BACKEND_BASE_ENDPOINT;
 
-  // unpack props
+  // Unpack props
   const { onQuery,
     wikiPage, setWikiPage,
     formData, setFormData,
     showAlert, setShowAlert,
     alertMessage, setAlertMessage
   } = props;
-  // states
+  // States
   const [categories, setCategories] = useState([]);
   const [dataSources, setDataSources] = useState([]);
   const [languages, setLanguages] = useState({});
-  const [models, setModels] = useState([]);
-
+  const [models, setModels] = useState({});
 
   useEffect(() => {
     async function fetchFormData() {
@@ -31,7 +30,7 @@ function FormComponent(props) {
           category: response.data.categories[0],
           dataSource: response.data.data_sources[0],
           language: Object.keys(response.data.languages)[0],
-          model: response.data.models[0],
+          model: Object.keys(response.data.models)[0], // Set initial model key
           subject: ''
         });
       } catch (error) {
@@ -53,7 +52,7 @@ function FormComponent(props) {
     e.preventDefault();
     setShowAlert(false);
     if (formData.subject.trim()) {
-      // reset wikipage on a new search
+      // Reset wikipage on a new search
       if(wikiPage.title !== ''){
         setWikiPage({ title: '', content: '' })
       }
@@ -62,6 +61,7 @@ function FormComponent(props) {
         category: formData.category,
         language: formData.language,
         data_source: formData.dataSource,
+        model: formData.model, // Send model key to backend
       });
     } else {
       setAlertMessage('Subject cannot be empty');
@@ -129,9 +129,9 @@ function FormComponent(props) {
                 value={formData.model}
                 onChange={handleChange}
               >
-                {models.map((model) => (
-                  <option key={model} value={model}>
-                    {model}
+                {Object.entries(models).map(([key, fullName]) => (
+                  <option key={key} value={key}>
+                    {fullName}
                   </option>
                 ))}
               </Form.Control>
