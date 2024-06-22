@@ -1,6 +1,6 @@
 ipywidgets
 flask
-flas-cors
+flask-cors
 pandas
 numpy
 google-api-python-client
