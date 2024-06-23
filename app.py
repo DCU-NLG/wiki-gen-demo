@@ -1,5 +1,5 @@
 """Simple flask server"""
-from typing import Dict, List, Tuple, Any
+from typing import Dict, Any
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
@@ -173,7 +173,7 @@ LANGUAGES = {
 }
 
 MODELS = {
-    "Example Triple Generator": {
+    "example": {
         "full_name": "Example Triple Generator",
         "function": example_generation,  # The name of the function (no parenthesis)
         "supported_languages": ["EN"]
@@ -183,7 +183,7 @@ MODELS = {
         "function": forge_generation,  # The name of the function (no parenthesis)
         "supported_languages": ["EN", "GA"]
     },
-    "TODO": {
+    "llm": {
         "full_name": "TODO",
         "function": llm_generation,  # The name of the function (no parenthesis)
         "supported_languages": ["EN", "GA"]
@@ -192,7 +192,7 @@ MODELS = {
 
 
 @app.route('/form-data', methods=['GET'])
-def form_data():
+def form_data() -> Dict[str, Any]:
     return jsonify({
         'categories': CATEGORIES,
         'data_sources': DATA_SOURCES,
@@ -200,43 +200,35 @@ def form_data():
         'models': {k: v["full_name"] for (k, v) in MODELS.items()},
     })
 
-# Error handler for 404 errors
-# @app.errorhandler(404)
-# def page_not_found(e):
-#     # Redirect to the home page
-#     return redirect('/generate')
 
-
-# @Rudali ---> please go under frontned/src/components and fill the react components with
-# the html you wanted to include
-# @app.route('/instructions', methods=['GET'])
-# def instructions():
-#     return render_template('instructions.html')
+# @Craig @Michela
+# I expected the output as a dictionary having the following keys:
+# - title: str -- the title of the wikipedia webpage
+# - content: Dict[str, str] -- a dictionary containing the model name as key and the generated content as value
 #
+# Example:
+#  {
+#    "title: "Foo title",
+#    "content" {
+#       "modelA": "lorem ipsum ...",
+#       "modelB": "fo bar doh ..."
+#     }
+#  }
 #
-# @app.route('/references', methods=['GET'])
-# def references():
-#     return render_template('references.html')
-#
-#
-# @app.route('/contact', methods=['GET'])
-# def contact():
-#     return render_template('contact.html')
-
-
+# NOTICE: the current implementation already satisfies these requirements ;)
 @app.route('/generate', methods=['POST'])
-def generate():
+def generate() -> Dict[str, Dict[str, str]]:
     data = request.get_json()
 
     pp.pprint(data)
 
-    triples = {int(k):v for k,v in data["triplets"].items()}
+    triples = {int(k): v for k, v in data["triplets"].items()}
     language = data["language"]
     data_source = data["dataSource"]
-    models = data["model"] if type(data["model"]) == dict else [data["model"]] 
+    models = data["model"]
     category = data["category"]
 
-    content = "Lorum Ipsum ..."
+    content = {}
     title = "Placeholder"
 
     for model in models:
@@ -250,12 +242,10 @@ def generate():
                 "data_source": data_source,
                 "category": category,
             }
-            # TODO -update this when massi has added multi-model to UI
-            # content[model] = generate_function(triples, args)
-            content = generate_function(triples, args)
+            content[model] = generate_function(triples, args)
 
             # Mocked for now
-            title = "Generated Title"
+            title = "Generated Title" # @Craig this could be simply the name of the entity, right?
 
     return jsonify({'title': title, 'content': content})
 
