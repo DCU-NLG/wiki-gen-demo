@@ -7,7 +7,40 @@
 body {padding-bottom: 70px;}
 
 .app-container {
-    /*display: flex;*/
     widtH: 80%;
     margin: auto;
 }
+
+
+:root {
+  --theme: #cfe2ff;
+  --theme-hover: #8db1f1;
+}
+
+.btn, .navbar  {
+    background-color: var(--theme)!important;
+    border-color: var(--theme)!important;
+    color: black;
+}
+
+
+.btn:hover {
+    background-color: var(--theme-hover);
+    border-color: var(--theme-hover);
+    color: black;
+}
+
+input[type=checkbox]:checked {
+    background-color: var(--theme-hover) !important;
+    border-color: var(--theme-hover);
+}
+input[type='checkbox']:after {
+    box-shadow: none !important;
+}
+
+option:checked {
+    background: var(--theme);
+}
+
+
+
