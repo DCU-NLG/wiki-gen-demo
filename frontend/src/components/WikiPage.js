@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Form, FormCheck } from 'react-bootstrap';
 
 function WikiPage({ title, content }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editableContent, setEditableContent] = useState(content);
+  const [selectedSection, setSelectedSection] = useState(0);
 
   useEffect(() => {
     setEditableContent(content);
@@ -24,6 +25,15 @@ function WikiPage({ title, content }) {
     setIsEditing(false);
   };
 
+  const handlePushClick = () => {
+    // Implement the callback (for now, it does nothing!)
+    console.log('Push button clicked');
+  };
+
+  const handleCheckboxChange = (index) => {
+    setSelectedSection(index);
+  };
+
   const modelEntries = Object.entries(editableContent);
 
   return (
@@ -41,28 +51,43 @@ function WikiPage({ title, content }) {
                 />
                 <span className="h1 font-weight-bold">&nbsp;&nbsp;{title}</span>
               </div>
-              <Button
-                variant="outline-primary"
-                onClick={isEditing ? handleSaveClick : handleEditClick}
-              >
-                {isEditing ? 'Save' : 'Edit'}
-              </Button>
+              <div>
+                <Button variant="outline-primary" className="me-2" onClick={handlePushClick}>
+                  Push to Wikipedia
+                </Button>
+
+                <Button
+                  variant="outline-primary"
+                  onClick={isEditing ? handleSaveClick : handleEditClick}
+                >
+                  {isEditing ? 'Save' : 'Edit'}
+                </Button>
+              </div>
             </Card.Header>
             <Card.Body>
               {modelEntries.map(([model, text], index) => (
-                <div key={model} className="mb-3">
-                  <h2>{model}</h2>
-                  {isEditing ? (
-                    <Form.Control
-                      as="textarea"
-                      rows={5}
-                      value={text}
-                      onChange={(e) => handleContentChange(e, model)}
-                    />
-                  ) : (
-                    <div dangerouslySetInnerHTML={{ __html: text }} />
-                  )}
-                  {index < modelEntries.length - 1 && <hr />}
+                <div key={model} className="mb-3 d-flex align-items-start">
+                  <FormCheck
+                    type="radio"
+                    name="sectionSelect"
+                    checked={selectedSection === index}
+                    onChange={() => handleCheckboxChange(index)}
+                    className="me-2"
+                  />
+                  <div style={{ flexGrow: 1 }}>
+                    <h2>{model}</h2>
+                    {isEditing ? (
+                      <Form.Control
+                        as="textarea"
+                        rows={5}
+                        value={text}
+                        onChange={(e) => handleContentChange(e, model)}
+                      />
+                    ) : (
+                      <div dangerouslySetInnerHTML={{ __html: text }} />
+                    )}
+                    {index < modelEntries.length - 1 && <hr />}
+                  </div>
                 </div>
               ))}
             </Card.Body>
