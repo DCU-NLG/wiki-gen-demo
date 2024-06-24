@@ -12,6 +12,10 @@ import setup_repo
 # Michela's LLM system
 import llm_main
 
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
+
+
 app = Flask(__name__)
 CORS(app)  # This will allow all origins by default
 
@@ -45,14 +49,18 @@ def query_triples():
 
 # All generate functions should take the input triples (list of lists) and k-v pair args
 def example_generation(triples, args: Dict[str, Any] = None):
+
     sentences = []
-    for triple in triples:
-        sentences.append(f"{triple[0]} {triple[1]} is {triple[2]}")
+    for triple in triples.values():
+        sentences.append(f"{triple[0]} {triple[1]} is {triple[2]}".replace("_"," "))
     return ".  ".join(sentences) + "."
 
 
 # All generate functions should take the input triples (dict of tuples) and k-v pair args
 def forge_generation(triples, args: Dict[str, Any] = None):
+    pp.pprint(triples)
+    pp.pprint(args)
+
     # Args are passed to this function as below
     language = args["language"]
     category = args["category"]
@@ -170,21 +178,21 @@ LANGUAGES = {
 }
 
 MODELS = {
-    "example": {
-        "full_name": "Example Triple Generator",
-        "function": example_generation,  # The name of the function (no parenthesis)
-        "supported_languages": ["EN"]
-    },
-    "forge": {
+    "FORGe": {
         "full_name": "FORGe",
         "function": forge_generation,  # The name of the function (no parenthesis)
         "supported_languages": ["EN", "GA"]
     },
-    "llm": {
-        "full_name": "TODO",
+    "GPT3.5": {
+        "full_name": "LLM - GPT-3.5",
         "function": llm_generation,  # The name of the function (no parenthesis)
         "supported_languages": ["EN", "GA"]
-    }
+    },
+    "Baseline": {
+        "full_name": "Baseline Triple Generator",
+        "function": example_generation,  # The name of the function (no parenthesis)
+        "supported_languages": ["EN"]
+    },
 }
 
 
@@ -225,23 +233,34 @@ def form_data():
 def generate():
     data = request.get_json()
 
-    triples = {i:triple for i, triple in enumerate(data["triplets"])}
-    language = "EN"
-    data_source = "Ontology"
-    model = "forge"
-    category = "Airport"
+    pp.pprint(data)
 
-    generate_function = MODELS[model]["function"]
+    triples = {int(k):v for k,v in data["triplets"].items()}
+    language = data["language"]
+    data_source = data["dataSource"]
+    models = data["model"]
+    category = data["category"]
 
-    args = {
-        "language": language,
-        "data_source": data_source,
-        "category": category,
-    }
-    content = generate_function(triples, args)
+    content = {}
 
-    # Mocked for now
-    title = "Generated Title"
+    for model in models:
+
+        generate_function = MODELS[model]["function"]
+
+        if language in MODELS[model]["supported_languages"]:
+
+            args = {
+                "language": language,
+                "data_source": data_source,
+                "category": category,
+            }
+            # TODO -update this when massi has added multi-model to UI
+            # content[model] = generate_function(triples, args)
+            content[model] = generate_function(triples, args)
+
+            # Mocked for now
+            title = "Generated Title"
+
     return jsonify({'title': title, 'content': content})
 
 

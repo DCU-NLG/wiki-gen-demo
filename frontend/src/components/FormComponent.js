@@ -30,7 +30,7 @@ function FormComponent(props) {
           category: response.data.categories[0],
           dataSource: response.data.data_sources[0],
           language: Object.keys(response.data.languages)[0],
-          model: Object.keys(response.data.models)[0], // Set initial model key
+          model: [Object.keys(response.data.models)[0]], // Set initial model key as an array
           subject: ''
         });
       } catch (error) {
@@ -41,11 +41,25 @@ function FormComponent(props) {
   }, []);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    const { name, value, options } = e.target;
+    if (name === 'model') {
+      // Handle multi-select for models
+      const selectedModels = [];
+      for (const option of options) {
+        if (option.selected) {
+          selectedModels.push(option.value);
+        }
+      }
+      setFormData({
+        ...formData,
+        [name]: selectedModels
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
   };
 
   const handleSubmit = (e) => {
@@ -61,7 +75,7 @@ function FormComponent(props) {
         category: formData.category,
         language: formData.language,
         data_source: formData.dataSource,
-        model: formData.model, // Send model key to backend
+        model: formData.model, // Send model keys to backend as an array
       });
     } else {
       setAlertMessage('Subject cannot be empty');
@@ -76,6 +90,47 @@ function FormComponent(props) {
           <h2>Generate Wikipedia-like Page</h2>
           {showAlert && <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>{alertMessage}</Alert>}
           <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="subjectInput" className="mb-3">
+              <Form.Label>Entity:</Form.Label>
+              <Form.Control
+                type="text"
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
+                placeholder="Enter one entity"
+              />
+            </Form.Group>
+            <Form.Group controlId="languageSelect" className="mb-3">
+              <Form.Label>Select Language:</Form.Label>
+              <Form.Control
+                as="select"
+                name="language"
+                value={formData.language}
+                onChange={handleChange}
+              >
+                {Object.entries(languages).map(([code, name]) => (
+                  <option key={code} value={code}>
+                    {name}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+            <Form.Group controlId="modelSelect" className="mb-3">
+              <Form.Label>Select at least one model:</Form.Label>
+              <Form.Control
+                as="select"
+                name="model"
+                value={formData.model}
+                onChange={handleChange}
+                multiple // Enable multiple selection
+              >
+                {Object.entries(models).map(([key, fullName]) => (
+                  <option key={key} value={key}>
+                    {fullName}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
             <Form.Group controlId="categorySelect" className="mb-3">
               <Form.Label>Select Category:</Form.Label>
               <Form.Control
@@ -106,48 +161,8 @@ function FormComponent(props) {
                 ))}
               </Form.Control>
             </Form.Group>
-            <Form.Group controlId="languageSelect" className="mb-3">
-              <Form.Label>Select Language:</Form.Label>
-              <Form.Control
-                as="select"
-                name="language"
-                value={formData.language}
-                onChange={handleChange}
-              >
-                {Object.entries(languages).map(([code, name]) => (
-                  <option key={code} value={code}>
-                    {name}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
-            <Form.Group controlId="modelSelect" className="mb-3">
-              <Form.Label>Select Model:</Form.Label>
-              <Form.Control
-                as="select"
-                name="model"
-                value={formData.model}
-                onChange={handleChange}
-              >
-                {Object.entries(models).map(([key, fullName]) => (
-                  <option key={key} value={key}>
-                    {fullName}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
-            <Form.Group controlId="subjectInput" className="mb-3">
-              <Form.Label>Subject:</Form.Label>
-              <Form.Control
-                type="text"
-                name="subject"
-                value={formData.subject}
-                onChange={handleChange}
-                placeholder="Enter the subject"
-              />
-            </Form.Group>
             <Button variant="primary" type="submit">
-              Query
+              Query DBpedia
             </Button>
           </Form>
         </Col>
