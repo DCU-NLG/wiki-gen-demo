@@ -6,4 +6,4 @@ numpy
 google-api-python-client
 SPARQLWrapper
 python-dotenv
-aixplain
+aixplain==0.2.9
