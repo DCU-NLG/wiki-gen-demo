@@ -5,3 +5,5 @@ pandas
 numpy
 google-api-python-client
 SPARQLWrapper
+python-dotenv
+aixplain
