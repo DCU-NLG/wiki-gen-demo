@@ -4,7 +4,6 @@ import json
 
 # model related imports
 from aixplain.factories.model_factory import ModelFactory
-#815b0fe35de60ba893c404f7de101ad1319750c469ab0d0593a3b54e6989ab0c
 
 
 def preprocess_triples(triples, triples_div="; "):
