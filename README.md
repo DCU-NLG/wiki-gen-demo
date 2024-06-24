@@ -21,6 +21,12 @@ and install p7
 sudo apt install p7zip-full p7zip-rar
 ```
 
+Create a `env` files under `LLM` and set your aixplain API key
+
+```bash
+echo "YOUR-API-KEY" >> LLM/env_variables.env
+```
+
 Lastly, run the app
 
 ```shell

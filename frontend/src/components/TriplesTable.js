@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, FormCheck } from 'react-bootstrap';
+import { Table, Button, FormCheck, Spinner } from 'react-bootstrap';
 
 function TriplesTable({ triples, onGenerate }) {
   const M = process.env.REACT_APP_N_PRESELECT_TRIPLES; // Number of triplets to pre-select by unique predicate
   const [selectedTriples, setSelectedTriples] = useState({});
+  const [loading, setLoading] = useState(false); // State to manage loading spinner
 
   useEffect(() => {
     // Pre-select the first M unique triplets based on unique predicate
@@ -18,7 +19,7 @@ function TriplesTable({ triples, onGenerate }) {
       }
     }
     setSelectedTriples(uniqueTriples);
-  }, [triples]);
+  }, [triples, M]);
 
   const handleCheckboxChange = (index) => {
     const updatedSelection = { ...selectedTriples };
@@ -30,8 +31,10 @@ function TriplesTable({ triples, onGenerate }) {
     setSelectedTriples(updatedSelection);
   };
 
-  const handleGenerateClick = () => {
-    onGenerate(selectedTriples);
+  const handleGenerateClick = async () => {
+    setLoading(true);
+    await onGenerate(selectedTriples);
+    setLoading(false);
   };
 
   return (
@@ -68,8 +71,15 @@ function TriplesTable({ triples, onGenerate }) {
       </div>
       {Object.keys(selectedTriples).length > 0 && (
         <div className="fixed-button">
-          <Button variant="primary" onClick={handleGenerateClick}>
-            Generate
+          <Button variant="primary" onClick={handleGenerateClick} disabled={loading}>
+            {loading ? (
+              <>
+                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+                {' '} Generating...
+              </>
+            ) : (
+              'Generate'
+            )}
           </Button>
         </div>
       )}

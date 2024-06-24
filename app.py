@@ -112,37 +112,11 @@ def forge_generation(triples, args: Dict[str, Any] = None):
     return s
 
 
-# @Michela, we need to be able to call your generator here
-# All generate functions should take the input triples (list of tuples) and k-v pair args
 def llm_generation(triples, args: Dict[str, Any] = None):
     llm_triples = [f"{triple[0]} | {triple[1]} | {triple[2]}" for triple in triples.values()]
     output = llm_main.GPT35_MODEL.generate_api(llm_triples, language=args['language'], prompt_type='few_shot')
     return output
 
-
-# @Massi, this can be removed, it just shows how the functions work
-
-# test_triples = query_triples(
-#     entity_name="Dublin_Airport",
-#     category="Airport",
-#     language="EN",
-#     data_source="Ontology"
-# )
-#
-# test_generation = forge_generation(
-#     test_triples,
-#     args={
-#         "language": "EN",
-#         "category": "Airport",
-#         "data_source": "Ontology"
-#     }
-# )
-#
-# print("Example Generation:")
-# pp.pprint(test_triples)
-# print("\nSentence:")
-# print("\t", test_generation)
-# print("----------------\n")
 
 CATEGORIES = [
     "Unknown",
@@ -205,29 +179,6 @@ def form_data():
         'models': {k: v["full_name"] for (k, v) in MODELS.items()},
     })
 
-# Error handler for 404 errors
-# @app.errorhandler(404)
-# def page_not_found(e):
-#     # Redirect to the home page
-#     return redirect('/generate')
-
-
-# @Rudali ---> please go under frontned/src/components and fill the react components with
-# the html you wanted to include
-# @app.route('/instructions', methods=['GET'])
-# def instructions():
-#     return render_template('instructions.html')
-#
-#
-# @app.route('/references', methods=['GET'])
-# def references():
-#     return render_template('references.html')
-#
-#
-# @app.route('/contact', methods=['GET'])
-# def contact():
-#     return render_template('contact.html')
-
 
 @app.route('/generate', methods=['POST'])
 def generate():
@@ -235,31 +186,24 @@ def generate():
 
     pp.pprint(data)
 
-    triples = {int(k):v for k,v in data["triplets"].items()}
+    triples = {int(k): v for k,v in data["triplets"].items()}
     language = data["language"]
     data_source = data["dataSource"]
     models = data["model"]
     category = data["category"]
 
+    title = list(triples.values())[0][0].replace("_", " ")
     content = {}
-
     for model in models:
-
         generate_function = MODELS[model]["function"]
-
         if language in MODELS[model]["supported_languages"]:
-
             args = {
                 "language": language,
                 "data_source": data_source,
                 "category": category,
             }
-            # TODO -update this when massi has added multi-model to UI
-            # content[model] = generate_function(triples, args)
-            content[model] = generate_function(triples, args)
 
-            # Mocked for now
-            title = "Generated Title"
+            content[model] = generate_function(triples, args)
 
     return jsonify({'title': title, 'content': content})
 
