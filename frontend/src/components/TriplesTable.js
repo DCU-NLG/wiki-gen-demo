@@ -35,38 +35,43 @@ function TriplesTable({ triples, onGenerate }) {
   };
 
   return (
-    <div className="col-md-6 mt-4">
+    <div>
       <h2>Triples</h2>
-      <Table bordered>
-        <thead>
-          <tr>
-            <th scope="col">Select</th>
-            <th scope="col">Subject</th>
-            <th scope="col">Predicate</th>
-            <th scope="col">Object</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Object.entries(triples).map(([index, [subject, predicate, object]]) => (
-            <tr key={index}>
-              <td>
-                <FormCheck
-                  type="checkbox"
-                  checked={selectedTriples.hasOwnProperty(index)}
-                  onChange={() => handleCheckboxChange(index)}
-                />
-              </td>
-              <td>{subject}</td>
-              <td>{predicate}</td>
-              <td>{object}</td>
+      &nbsp;
+      <div className="scrollable-table">
+        <Table bordered>
+          <thead>
+            <tr>
+              <th scope="col">Select</th>
+              <th scope="col">Subject</th>
+              <th scope="col">Predicate</th>
+              <th scope="col">Object</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {Object.entries(triples).map(([index, [subject, predicate, object]]) => (
+              <tr key={index}>
+                <td>
+                  <FormCheck
+                    type="checkbox"
+                    checked={selectedTriples.hasOwnProperty(index)}
+                    onChange={() => handleCheckboxChange(index)}
+                  />
+                </td>
+                <td>{subject}</td>
+                <td>{predicate}</td>
+                <td>{object}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
       {Object.keys(selectedTriples).length > 0 && (
-        <Button variant="primary" onClick={handleGenerateClick}>
-          Generate
-        </Button>
+        <div className="fixed-button">
+          <Button variant="primary" onClick={handleGenerateClick}>
+            Generate
+          </Button>
+        </div>
       )}
     </div>
   );

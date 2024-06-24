@@ -43,4 +43,16 @@ option:checked {
 }
 
 
+.scrollable-table {
+  max-height: 450px;
+  overflow-y: scroll;
+}
+
+.fixed-button {
+  position: sticky;
+  bottom: 0;
+  padding: 10px 0;
+}
+
+
 

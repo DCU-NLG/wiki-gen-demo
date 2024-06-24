@@ -86,7 +86,7 @@ function FormComponent(props) {
   return (
     <Container>
       <Row>
-        <Col md={6}>
+        <Col>
           <h2>Generate Wikipedia-like Page</h2>
           {showAlert && <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>{alertMessage}</Alert>}
           <Form onSubmit={handleSubmit}>

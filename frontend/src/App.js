@@ -11,7 +11,7 @@ import Instructions from './components/Instructions';
 import Contact from './components/Contact';
 import './App.css';
 
-import { Container, Row } from 'react-bootstrap';
+import {Col, Container, Row} from 'react-bootstrap';
 
 function App() {
   const base_url = process.env.REACT_APP_BACKEND_BASE_ENDPOINT;
@@ -74,15 +74,23 @@ function App() {
           <Route
             path="/"
             element={
-              <Row>
-                  <FormComponent onQuery={handleQuery}
-                                 wikiPage={wikiPage} setWikiPage={setWikiPage}
-                                 formData={formData} setFormData={setFormData}
-                                 showAlert={showAlert} setShowAlert={setShowAlert}
-                                 alertMessage={alertMessage} setAlertMessage={setAlertMessage}/>
-                  {Object.keys(triples).length > 0 && <TriplesTable triples={triples} onGenerate={handleGenerate} />}
-                  {wikiPage.title && <WikiPage title={wikiPage.title} content={wikiPage.content} />}
-              </Row>
+              <>
+                  <Row>
+                      <Col md={6}>
+                          <FormComponent onQuery={handleQuery}
+                                     wikiPage={wikiPage} setWikiPage={setWikiPage}
+                                     formData={formData} setFormData={setFormData}
+                                     showAlert={showAlert} setShowAlert={setShowAlert}
+                                     alertMessage={alertMessage} setAlertMessage={setAlertMessage}/>
+                      </Col>
+                      <Col md={6}>
+                          {Object.keys(triples).length > 0 && <TriplesTable triples={triples} onGenerate={handleGenerate} />}
+                      </Col>
+                  </Row>
+                  <Row style={{marginTop: "5vh"}}>
+                      {wikiPage.title && <WikiPage title={wikiPage.title} content={wikiPage.content} />}
+                  </Row>
+              </>
             }
           />
           <Route path="/instructions" element={<Instructions />} />
