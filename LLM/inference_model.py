@@ -38,27 +38,35 @@ class PretrainedModel:
         end_instr = self.hyperparameters['end_instr']
         start_ans = self.hyperparameters['start_ans']
 
+        language = self.lan2text[lan] if lan in self.lan2text else lan
+
         if prompt_type == 'zero_shot':
             return self.hyperparameters['zero_shot'].format(triples=preprocess_triples(sample, triples_div=self.hyperparameters['triples_div']), 
-                                                    language=self.lan2text[lan], start_instr=start_instr, end_instr=end_instr, 
+                                                    language=language, start_instr=start_instr, end_instr=end_instr, 
                                                     start_ans=start_ans)
         elif prompt_type == 'few_shot':
             examples = self.hyperparameters['few_shot']['fixed_examples']
 
-            examples = [self.hyperparameters['few_shot']['example'].format(triples=preprocess_triples(example['input'], 
-                                                                                                triples_div=self.hyperparameters['triples_div']), 
-                                                                    i=i+1, target=example['target'][lan]) 
-                                                                    for i, example in enumerate(examples)]
+            if lan in examples[0]['target']:
+
+                examples = [self.hyperparameters['few_shot']['example'].format(triples=preprocess_triples(example['input'], 
+                                                                                                    triples_div=self.hyperparameters['triples_div']), 
+                                                                        i=i+1, target=example['target'][lan]) 
+                                                                        for i, example in enumerate(examples)]
             
-            examples = self.hyperparameters['few_shot']['examples_divider'].join(examples)
+                examples = self.hyperparameters['few_shot']['examples_divider'].join(examples)
             
-            return self.hyperparameters['few_shot']['instruction'].format(triples=preprocess_triples(sample, 
+                return self.hyperparameters['few_shot']['instruction'].format(triples=preprocess_triples(sample, 
                                                                                             triples_div=self.hyperparameters['triples_div']), 
-                                                                    language=self.lan2text[lan], 
+                                                                    language=language, 
                                                                     start_instr=start_instr, 
                                                                     end_instr=end_instr, 
                                                                     start_ans=start_ans, 
                                                                     examples=examples)
+            else:
+                return self.hyperparameters['zero_shot'].format(triples=preprocess_triples(sample, triples_div=self.hyperparameters['triples_div']), 
+                                                    language=language, start_instr=start_instr, end_instr=end_instr, 
+                                                    start_ans=start_ans)
         return
     
 

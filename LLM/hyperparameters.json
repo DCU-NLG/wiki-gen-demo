@@ -15,6 +15,7 @@
                     "input": ["Adolfo_Su\u00e1rez_Madrid-Barajas_Airport | runwayName | \"14R/32L\""], 
                     "target": {
                         "EN": "14R/32L is the runway name of Adolfo Su\u00e1rez Madrid-Barajas Airport.", 
+                        "GA": "Is \u00e9 14R/32L an t-ainm r\u00faidbhealaigh ar Aerfort Adolfo Su\u00e1rez Madrid-Barajas.",
                         "ZH": "14R/32L\u662f\u963f\u591a\u5c14\u798f\u00b7\u82cf\u4e9a\u96f7\u65af\u9a6c\u5fb7\u91cc\u5df4\u62c9\u54c8\u65af\u673a\u573a\u7684\u8dd1\u9053\u540d\u79f0.", 
                         "DE": "14R/32L ist der Start- und Landebahnnamen des Flughafens Adolfo Su\u00e1rez Madrid-Barajas.", 
                         "RU": "14R/32L - \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u0432\u0437\u043b\u0435\u0442\u043d\u043e-\u043f\u043e\u0441\u0430\u0434\u043e\u0447\u043d\u043e\u0439 \u043f\u043e\u043b\u043e\u0441\u044b \u0430\u044d\u0440\u043e\u043f\u043e\u0440\u0442\u0430 \u0410\u0434\u043e\u043b\u044c\u0444\u043e \u0421\u0443\u0430\u0440\u0435\u0441 \u041c\u0430\u0434\u0440\u0438\u0434-\u0411\u0430\u0440\u0430\u0445\u0430\u0441.", 
@@ -29,6 +30,7 @@
                     "input": ["American_Journal_of_Mathematics | abbreviation | \"Am. J. Math.\"", "American_Journal_of_Mathematics | firstPublicationYear | 1878", "American_Journal_of_Mathematics | issnNumber | \"1080-6377\""], 
                     "target": {
                         "EN": "The American Journal of Mathematics was first published in 1878 and is also known by the abbreviated title of Am. J. Math. It has an ISSN number of 1080-6377.", 
+                        "GA": "Foils\u00edodh an American Journal of Mathematics den ch\u00e9ad uair sa bhliain 1878 agus t\u00e1 an teideal giorraithe Am. J. Math. T\u00e1 uimhir ISSN 1080-6377 aige.",
                         "ZH": "\u7f8e\u56fd\u6570\u5b66\u6742\u5fd7\u4e8e1878\u5e74\u9996\u6b21\u51fa\u7248,\u4e5f\u88ab\u79f0\u4e3aAM.J.Math\u7684\u7f29\u5199\u540d\u79f0. \u5b83\u7684ISSN\u53f7\u4e3a1080-6377.", 
                         "DE": "Das American Journal of Mathematics wurde erstmals 1878 ver\u00f6ffentlicht und ist auch unter dem abgek\u00fcrzten Titel Am. J. Math bekannt. Es hat eine ISSN-Nummer von 1080-6377.", 
                         "RU": "\u0410\u043c\u0435\u0440\u0438\u043a\u0430\u043d\u0441\u043a\u0438\u0439 \u0436\u0443\u0440\u043d\u0430\u043b \u043c\u0430\u0442\u0435\u043c\u0430\u0442\u0438\u043a\u0438 \u0431\u044b\u043b \u0432\u043f\u0435\u0440\u0432\u044b\u0435 \u043e\u043f\u0443\u0431\u043b\u0438\u043a\u043e\u0432\u0430\u043d \u0432 1878 \u0433\u043e\u0434\u0443 \u0438 \u0442\u0430\u043a\u0436\u0435 \u0438\u0437\u0432\u0435\u0441\u0442\u0435\u043d \u0441\u043e\u043a\u0440\u0430\u0449\u0435\u043d\u043d\u044b\u043c \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435\u043c Am. J. Math. \u041e\u043d \u0438\u043c\u0435\u0435\u0442 \u043d\u043e\u043c\u0435\u0440 ISSN 1080-6377.", 
@@ -59,6 +61,7 @@
                     "input": ["Adolfo_Su\u00e1rez_Madrid-Barajas_Airport | runwayName | \"14R/32L\""], 
                     "target": {
                         "EN": "14R/32L is the runway name of Adolfo Su\u00e1rez Madrid-Barajas Airport.", 
+                        "GA": "Is \u00e9 14R/32L an t-ainm r\u00faidbhealaigh ar Aerfort Adolfo Su\u00e1rez Madrid-Barajas.",
                         "ZH": "14R/32L\u662f\u963f\u591a\u5c14\u798f\u00b7\u82cf\u4e9a\u96f7\u65af\u9a6c\u5fb7\u91cc\u5df4\u62c9\u54c8\u65af\u673a\u573a\u7684\u8dd1\u9053\u540d\u79f0.", 
                         "DE": "14R/32L ist der Start- und Landebahnnamen des Flughafens Adolfo Su\u00e1rez Madrid-Barajas.", 
                         "RU": "14R/32L - \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u0432\u0437\u043b\u0435\u0442\u043d\u043e-\u043f\u043e\u0441\u0430\u0434\u043e\u0447\u043d\u043e\u0439 \u043f\u043e\u043b\u043e\u0441\u044b \u0430\u044d\u0440\u043e\u043f\u043e\u0440\u0442\u0430 \u0410\u0434\u043e\u043b\u044c\u0444\u043e \u0421\u0443\u0430\u0440\u0435\u0441 \u041c\u0430\u0434\u0440\u0438\u0434-\u0411\u0430\u0440\u0430\u0445\u0430\u0441.", 
@@ -73,6 +76,7 @@
                     "input": ["American_Journal_of_Mathematics | abbreviation | \"Am. J. Math.\"", "American_Journal_of_Mathematics | firstPublicationYear | 1878", "American_Journal_of_Mathematics | issnNumber | \"1080-6377\""], 
                     "target": {
                         "EN": "The American Journal of Mathematics was first published in 1878 and is also known by the abbreviated title of Am. J. Math. It has an ISSN number of 1080-6377.", 
+                        "GA": "Foils\u00edodh an American Journal of Mathematics den ch\u00e9ad uair sa bhliain 1878 agus t\u00e1 an teideal giorraithe Am. J. Math. T\u00e1 uimhir ISSN 1080-6377 aige.",
                         "ZH": "\u7f8e\u56fd\u6570\u5b66\u6742\u5fd7\u4e8e1878\u5e74\u9996\u6b21\u51fa\u7248,\u4e5f\u88ab\u79f0\u4e3aAM.J.Math\u7684\u7f29\u5199\u540d\u79f0. \u5b83\u7684ISSN\u53f7\u4e3a1080-6377.", 
                         "DE": "Das American Journal of Mathematics wurde erstmals 1878 ver\u00f6ffentlicht und ist auch unter dem abgek\u00fcrzten Titel Am. J. Math bekannt. Es hat eine ISSN-Nummer von 1080-6377.", 
                         "RU": "\u0410\u043c\u0435\u0440\u0438\u043a\u0430\u043d\u0441\u043a\u0438\u0439 \u0436\u0443\u0440\u043d\u0430\u043b \u043c\u0430\u0442\u0435\u043c\u0430\u0442\u0438\u043a\u0438 \u0431\u044b\u043b \u0432\u043f\u0435\u0440\u0432\u044b\u0435 \u043e\u043f\u0443\u0431\u043b\u0438\u043a\u043e\u0432\u0430\u043d \u0432 1878 \u0433\u043e\u0434\u0443 \u0438 \u0442\u0430\u043a\u0436\u0435 \u0438\u0437\u0432\u0435\u0441\u0442\u0435\u043d \u0441\u043e\u043a\u0440\u0430\u0449\u0435\u043d\u043d\u044b\u043c \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435\u043c Am. J. Math. \u041e\u043d \u0438\u043c\u0435\u0435\u0442 \u043d\u043e\u043c\u0435\u0440 ISSN 1080-6377.", 
