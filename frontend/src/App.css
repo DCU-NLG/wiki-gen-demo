@@ -25,9 +25,9 @@ body {padding-bottom: 70px;}
 
 
 .btn:hover {
-    background-color: var(--theme-hover);
-    border-color: var(--theme-hover);
-    color: black;
+    background-color: var(--theme-hover)!important;
+    border-color: var(--theme-hover) !important;
+    color: black!important;
 }
 
 input[type=checkbox]:checked {
