@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Form, FormCheck } from 'react-bootstrap';
+import { FaCopy, FaCheck, FaEdit, FaSave } from 'react-icons/fa'; // Import the copy and check icons
+
 
 function WikiPage({ title, content }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editableContent, setEditableContent] = useState(content);
   const [selectedSection, setSelectedSection] = useState(0);
+  const [copyStatus, setCopyStatus] = useState(false);
 
   useEffect(() => {
     setEditableContent(content);
@@ -26,12 +29,20 @@ function WikiPage({ title, content }) {
   };
 
   const handlePushClick = () => {
-    // Implement the callback (for now, it does nothing!)
     console.log('Push button clicked');
   };
 
   const handleCheckboxChange = (index) => {
     setSelectedSection(index);
+  };
+
+  const handleCopyClick = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopyStatus(true);
+      setTimeout(() => setCopyStatus(false), 2000);
+    }).catch(err => {
+      console.error('Failed to copy text: ', err);
+    });
   };
 
   const modelEntries = Object.entries(editableContent);
@@ -53,14 +64,26 @@ function WikiPage({ title, content }) {
               </div>
               <div>
                 <Button variant="outline-primary" className="me-2" onClick={handlePushClick}>
-                  Push to Wikipedia
+                  Open on Wikipedia
                 </Button>
 
                 <Button
-                  variant="outline-primary"
+                  variant="outline-secondary"
                   onClick={isEditing ? handleSaveClick : handleEditClick}
                 >
-                  {isEditing ? 'Save' : 'Edit'}
+                  {isEditing ?
+                      <FaSave style={{ fontSize: '1.1em' }}/>
+                      :
+                      <FaEdit style={{ fontSize: '1.2em'}} />
+                  }
+                </Button>
+
+                <Button
+                  variant="outline-secondary"
+                  className="ms-2" // Add margin to the left
+                  onClick={() => handleCopyClick(modelEntries[selectedSection][1])}
+                >
+                  {copyStatus ? <FaCheck style={{ color: 'green' }} /> : <FaCopy />}
                 </Button>
               </div>
             </Card.Header>
