@@ -1,0 +1,9 @@
+ipywidgets
+flask
+flask-cors
+pandas
+numpy
+google-api-python-client
+SPARQLWrapper
+python-dotenv
+aixplain==0.2.9

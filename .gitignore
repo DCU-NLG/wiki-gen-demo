@@ -1,1 +1,13 @@
+# Pycharm
+.idea/
 __pycache__/
+
+# env
+.venv/
+venv/
+FORGe/*
+
+# misc
+.DS_Store
+
+LLM/env_variables.env

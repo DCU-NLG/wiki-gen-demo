@@ -1,0 +1,58 @@
+.App {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+body {padding-bottom: 70px;}
+
+.app-container {
+    widtH: 80%;
+    margin: auto;
+}
+
+
+:root {
+  --theme: #cfe2ff;
+  --theme-hover: #8db1f1;
+}
+
+.btn, .navbar  {
+    background-color: var(--theme)!important;
+    border-color: var(--theme)!important;
+    color: black;
+}
+
+
+.btn:hover {
+    background-color: var(--theme-hover)!important;
+    border-color: var(--theme-hover) !important;
+    color: black!important;
+}
+
+input[type=checkbox]:checked {
+    background-color: var(--theme-hover) !important;
+    border-color: var(--theme-hover);
+}
+input[type='checkbox']:after {
+    box-shadow: none !important;
+}
+
+option:checked {
+    background: var(--theme);
+}
+
+
+.scrollable-table {
+  max-height: 450px;
+  overflow-y: scroll;
+}
+
+.fixed-button {
+  position: sticky;
+  bottom: 0;
+  padding: 10px 0;
+}
+
+
+
