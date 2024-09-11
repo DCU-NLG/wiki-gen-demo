@@ -15,6 +15,7 @@ body {padding-bottom: 70px;}
 :root {
   --theme: #cfe2ff;
   --theme-hover: #8db1f1;
+  --woman-in-red: #D73334;
 }
 
 .btn, .navbar  {
@@ -54,5 +55,11 @@ option:checked {
   padding: 10px 0;
 }
 
+.woman-in-red-box {
+    background-color: var(--woman-in-red);
+    border: 2px solid var(--woman-in-red);
+    padding-left: 5px;
+    padding-right: 5px;
+}
 
 
