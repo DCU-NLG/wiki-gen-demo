@@ -6,6 +6,15 @@ const WiRDescr = `The Women in Red WikiProject focuses on creating content regar
 women's works, and women's issues. The objective is to turn "redlinks" on Wikipedia into blue ones, and by doing so,
 reduce Wikipedia's systematic gaps in its coverage of under-represented groups`;
 
+// define a const enum for the genders
+const GENDERS = {
+  MALE: 'Masculine',
+  FEMALE: 'Feminine',
+  OTHER: 'Other',
+  NONE: '-- Grammatical Gender --'
+};
+
+
 function FormComponent(props) {
   const base_url = process.env.REACT_APP_BACKEND_BASE_ENDPOINT;
 
@@ -37,7 +46,7 @@ function FormComponent(props) {
           subject: '',
           womanInRed: '',
           occupation: '',
-          gender: 'N\\A' // Set default gender
+          gender: null
         });
       } catch (error) {
         console.error('Error fetching form data:', error);
@@ -55,6 +64,8 @@ const filterWiR = (occupation) => {
     // Preset womanInRed to the first item in filteredWomenInRed
     setFormData((prevState) => ({
       ...prevState,
+      dataSource: 'Wikidata', // This must be set to WikiData and locked
+      gender: GENDERS.FEMALE,
       occupation: occupation, // Ensure the occupation is also updated
       womanInRed: filteredList.length > 0 ? filteredList[0] : ''
     }));
@@ -100,7 +111,7 @@ const filterWiR = (occupation) => {
     // Use functional setFormData here as well
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value || null
     }));
   }
 };
@@ -205,17 +216,17 @@ const filterWiR = (occupation) => {
                 </div>
             </div>
             <Form.Group controlId="genderSelect" className="mb-3">
-              <Form.Label>Select Grammatical Gender:</Form.Label>
+              <Form.Label>Select Grammatical Gender (if applicable):</Form.Label>
               <Form.Control
                   as="select"
                   name="gender"
                   value={formData.gender}
                   onChange={handleChange}
               >
-                <option value="N\\A">N/A</option>
-                <option value="Male">Masculine</option>
-                <option value="Female">Feminine</option>
-                <option value="Neutral">Neutral</option>
+                <option value=''>{GENDERS.NONE}</option>
+                <option>{GENDERS.MALE}</option>
+                <option>{GENDERS.FEMALE}</option>
+                <option>{GENDERS.OTHER}</option>
               </Form.Control>
             </Form.Group>
             <Form.Group controlId="languageSelect" className="mb-3">
@@ -256,6 +267,7 @@ const filterWiR = (occupation) => {
                 name="dataSource"
                 value={formData.dataSource}
                 onChange={handleChange}
+                disabled={isWiREnabled}
               >
                 {dataSources.map((dataSource) => (
                   <option key={dataSource} value={dataSource}>
