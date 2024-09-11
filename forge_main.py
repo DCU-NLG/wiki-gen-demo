@@ -11,6 +11,8 @@ import sys
 import os
 import shutil
 import time
+import codecs
+import re
 import ipywidgets as widgets
 from FORGe.WikipediaPage_Generator.code.queryDBpediaProps import get_dbpedia_properties
 from FORGe.WikipediaPage_Generator.code.utils import get_prop_index_from_table, removeReservedCharsFileName, create_xml, create_GPT_Prompt, create_jsons_SubjAndObj, prepare_variables_xml2CoNLL_conversion, clear_folder, clear_files, count_expected_texts, check_postProcessed_outputs, concatenate_files_UI
@@ -26,11 +28,58 @@ from FORGe.DCU_TCD_FORGe_WebNLG23.code.GA_inflect import run_GA_morphGen
 # triple_source = 'Ontology' #['Ontology', 'Infobox']
 ###################### END A- Arguments to pass to the function that runs FORGe
 
-def setParametersGeneral(entity_name, input_category='Unknown', language='EN', triple_source='Ontology', ignore_properties='width, title'):
-  entity_name = ('_').join([ent_comp[0].upper() + ent_comp[1:] for ent_comp in entity_name.strip().split(' ')])
+def add_gender_fromUser(path_t2p_out, entity_name, gram_gender):
+  # Open the file that has the conll extension in triples2predarg
+  # dico_gender = {'Feminine': 'gender=FEM', 'Masculine': 'gender=MASC', 'Other': 'gender=FEM|number=PL', '-Select Gender-': 'gender=NEU'}
+  dico_gender = {'Feminine': 'gender=FEM', 'Masculine': 'gender=MASC', 'Other': 'gender=FEM|number=PL'}
+  # There shoud be only one conll file in the folder, but that's a simple way to get to it
+  conll_files = [f for f in os.listdir(path_t2p_out) if f.endswith('.conll')]
+  if len(conll_files) > 0:
+    for conll_file in conll_files:
+      # If the filename doesn't already contain the _genAdd suffix
+      if not conll_file.endswith('_genAdd.conll'):
+        # Make a new filename
+        new_conll_file = conll_file.replace('.conll', '_genAdd.conll')
+        # print(new_conll_file)
+        # Open output conll file
+        with codecs.open(os.path.join(path_t2p_out, new_conll_file), 'w', 'utf-8') as new_text:
+          # Read original conll file 
+          with codecs.open(os.path.join(path_t2p_out, conll_file), 'r', 'utf-8') as text:
+            for line in text:
+              # If line has a tab, it's a conll line
+              if re.search('\t', line):
+                # Look for lines about the entity (name should match second column of conll)
+                columns = line.split('\t')
+                if columns[1] == entity_name:
+                  # If the FEATS column is not empty (it shouldn't be, but never know)
+                  if columns[6] != '_':
+                    # if the FEATS column already has a gender, just keep it
+                    if re.search('gender', columns[6]):
+                      new_text.write(line)
+                    # Otherwise, if it is in the dico, add the gender info
+                    elif gram_gender in dico_gender.keys():
+                      new_text.write('\t'.join(columns[0:7])+'|'+dico_gender.get(gram_gender, 'gender=NEU')+'\t'+'\t'.join(columns[7:]))
+                    # Otherwise, just write the line
+                    else:
+                      new_text.write(line)
+                  # If columns 6 is empty, just replace underscore by gender info
+                  else:
+                    # new_text.write(line.replace(columns[6], 'gender='+dico_gender[gram_gender]))
+                    new_text.write('\t'.join(columns[0:6])+'\t'+dico_gender.get(gram_gender, 'gender=NEU')+'\t'+'\t'.join(columns[7:]))
+                # if the line doesn't concern the entity, just keep it as it was
+                else:
+                  new_text.write(line)
+              # if the line is just a linebreak, just keep it as it was
+              else:
+                new_text.write(line)
 
+def setParametersGeneral(entity_name, input_category='Unknown', language='EN', triple_source='DBpedia Ontology', ignore_properties='width, title'):
+  #entity_name = ('_').join([ent_comp.capitalize() for ent_comp in entity_name.strip().split(' ')])
+  entity_name = ('_').join([ent_comp[0].upper() + ent_comp[1:] for ent_comp in entity_name.strip().split(' ')])
   group_modules_prm = 'yes'
   split = 'test'
+  dico_source = {'Wikipedia Infobox':'Infobox', 'DBpedia Ontology':'Ontology', 'Wikidata':'Wikidata'}
+  triple_source = dico_source.get(triple_source, 'Ontology')
   return entity_name, language, input_category, triple_source, ignore_properties, group_modules_prm, split
 
 def queryDBpediaProperties(props_list_path, entity_name, triple_source, ignore_properties):
@@ -52,7 +101,7 @@ def queryDBpediaProperties(props_list_path, entity_name, triple_source, ignore_p
   ### END INPUT NEEDED: list of indices of selected triples
   return list_triple_objects, list_propObj, list_obj, selected_properties
     
-def run_FORGe(root_folder, entity_name, language, input_category, group_modules_prm, split, list_triple_objects, list_obj, selected_properties, triple2predArg, triple2Conll_jar, morph_folder_name, morph_input_folder, morph_output_folder, props_list_path):
+def run_FORGe(root_folder, entity_name, language, input_category, group_modules_prm, split, gram_gender, list_triple_objects, list_obj, selected_properties, triple2predArg, triple2Conll_jar, morph_folder_name, morph_input_folder, morph_output_folder, props_list_path):
   ############### Generation parameters
   # Modules to run, with type of processing (FORGe, Model1, SimpleNLG, etc.).
   # Only FORGe is supported for this prototype version.
@@ -126,8 +175,11 @@ def run_FORGe(root_folder, entity_name, language, input_category, group_modules_
   # There seems to be a lag here between the moment the file is created and the moment it becomes available; I get a FileNotFoundError even though the file seems to be created there correctly
   print('Contemplating life and its purpose...')
   time.sleep(1)
+
+  # Add grammatical gender defined by user to the conll
+  add_gender_fromUser(path_t2p_out, entity_name, gram_gender)
   # Copy conll file to FORGe input folder
-  shutil.copy(os.path.join(path_t2p_out, newEntityName+'_'+language_t2p+'.conll'), str_PredArg_folder)
+  shutil.copy(os.path.join(path_t2p_out, newEntityName+'_'+language_t2p+'_genAdd.conll'), str_PredArg_folder)
   
   # Convert linguistic structures into English text or non-inflected Irish text (FORGe generator)
   print('Generating text with FORGe...')
