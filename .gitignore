@@ -6,6 +6,7 @@ __pycache__/
 .venv/
 venv/
 FORGe/*
+.env
 
 # misc
 .DS_Store

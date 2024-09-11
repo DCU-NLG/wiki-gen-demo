@@ -1,4 +1,5 @@
 """Simple flask server"""
+import json
 from typing import Dict, List, Tuple, Any
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -170,23 +171,8 @@ MODELS = {
     },
 }
 
-WIR_BY_CAT = {
-    "cat0": [
-        "wir0",
-        "wir1",
-        "wir2"
-    ],
-    "cat1": [
-        "wir0",
-        "wir1",
-        "wir2"
-    ],
-    "cat2": [
-        "wir0",
-        "wir1",
-        "wir2"
-    ],
-}
+with open("data/women_in_red_by_category.json") as f:
+    WIR_BY_CAT = json.load(f)
 
 @app.route('/form-data', methods=['GET'])
 def form_data():
@@ -230,3 +216,4 @@ def generate():
 
 if __name__ == '__main__':
     app.run()
+
