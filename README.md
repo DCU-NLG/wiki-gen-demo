@@ -1,4 +1,4 @@
-# WebNLG Demo
+# Seed Wikipedia page generator demo
 
 ## Quick (Dev) Setup
 ### Backend
