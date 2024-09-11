@@ -32,9 +32,10 @@ triple2predArg, triple2Conll_jar, morph_folder_name, morph_input_folder, morph_o
 def query_triples():
     data = request.get_json()
     entity_name = data.get('entity_name')
-    category = data.get('category')
+    category = 'Unknown'
     language = data.get('language')
     data_source = data.get('data_source')
+    gender = data.get('gender')
 
     # Set parameters and instantiate variables for parameters
     input_entity_name, _language, _input_category, triple_source, ignore_properties, _group_modules_prm, _split = forge_main.setParametersGeneral(
@@ -66,12 +67,13 @@ def forge_generation(triples, args: Dict[str, Any] = None):
     language = args["language"]
     category = args["category"]
     data_source = args["data_source"]
+    gender = args["gender"]
 
     # The entity name can be extracted from the triples
     entity_names = [x[0] for x in triples.values()]
     assert len(set(entity_names)) == 1
 
-    # Stuff that FORGe needs from the DBPedia Query
+    # Stuff that FORGe needs from the DBpedia Query
     entity_name, input_language, input_category, triple_source, ignore_properties, group_modules_prm, split = forge_main.setParametersGeneral(
         entity_names[0], category, language, data_source)
 
@@ -95,6 +97,7 @@ def forge_generation(triples, args: Dict[str, Any] = None):
         input_category,
         group_modules_prm,
         split,
+        gender,
         list_triple_objects,
         list_obj,
         triple_ids,
@@ -148,6 +151,12 @@ DATA_SOURCES = [
     "Wikidata"
 ]
 
+GENDERS = [
+    "Feminine",
+    "Masculine",
+    "Other"
+]
+
 LANGUAGES = {
     "EN": "English",
     "GA": "Irish"
@@ -180,6 +189,7 @@ def form_data():
         'categories': CATEGORIES,
         'data_sources': DATA_SOURCES,
         'languages': LANGUAGES,
+        'genders': GENDERS,
         'models': {k: v["full_name"] for (k, v) in MODELS.items()},
         'women_in_red': WIR_BY_CAT,
         'occupations': list(WIR_BY_CAT.keys()),
@@ -196,7 +206,7 @@ def generate():
     language = data["language"]
     data_source = data["dataSource"]
     models = data["model"]
-    category = data["category"]
+    category = 'Unknown'
 
     title = list(triples.values())[0][0].replace("_", " ")
     content = {}
