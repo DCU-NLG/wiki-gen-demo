@@ -224,7 +224,7 @@ const filterWiR = (occupation) => {
                   onChange={handleChange}
               >
                 <option value=''>{GENDERS.NONE}</option>
-                <option>{GENDERS.MALE}</option>
+                <optiongit>{GENDERS.MALE}</optiongit>
                 <option>{GENDERS.FEMALE}</option>
                 <option>{GENDERS.OTHER}</option>
               </Form.Control>

@@ -53,8 +53,8 @@ function App() {
               model: formData.model,
               language: formData.language,
               dataSource: formData.dataSource,
-              category: formData.category,
-              triplets: selectedTriples
+              triplets: selectedTriples,
+              gender: formData.gender,
             }
         );
 

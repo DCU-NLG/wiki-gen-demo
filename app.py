@@ -151,11 +151,6 @@ DATA_SOURCES = [
     "Wikidata"
 ]
 
-GENDERS = [
-    "Feminine",
-    "Masculine",
-    "Other"
-]
 
 LANGUAGES = {
     "EN": "English",
@@ -183,13 +178,13 @@ MODELS = {
 with open("data/women_in_red_by_category.json") as f:
     WIR_BY_CAT = json.load(f)
 
+
 @app.route('/form-data', methods=['GET'])
 def form_data():
     return jsonify({
         'categories': CATEGORIES,
         'data_sources': DATA_SOURCES,
         'languages': LANGUAGES,
-        'genders': GENDERS,
         'models': {k: v["full_name"] for (k, v) in MODELS.items()},
         'women_in_red': WIR_BY_CAT,
         'occupations': list(WIR_BY_CAT.keys()),
@@ -206,6 +201,7 @@ def generate():
     language = data["language"]
     data_source = data["dataSource"]
     models = data["model"]
+    gender = data["gender"]
     category = 'Unknown'
 
     title = list(triples.values())[0][0].replace("_", " ")
@@ -217,6 +213,7 @@ def generate():
                 "language": language,
                 "data_source": data_source,
                 "category": category,
+                "gender": gender,
             }
 
             content[model] = generate_function(triples, args)
