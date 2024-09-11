@@ -23,7 +23,9 @@ function App() {
     dataSource: '',
     language: '',
     model: '',
-    subject: ''
+    subject: '',
+    womanInRed: '',
+    occupation: '',
   });
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');

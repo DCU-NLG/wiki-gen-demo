@@ -16,6 +16,10 @@ function FormComponent(props) {
   const [dataSources, setDataSources] = useState([]);
   const [languages, setLanguages] = useState({});
   const [models, setModels] = useState({});
+  const [womenInRed, setWomenInRed] = useState([]);
+  const [filteredWomenInRed, setFilteredWomenInRed] = useState([])
+  const [occupations, setOccupations] = useState([]);
+  const [isWiREnabled, setIsWiREnabled] = useState(false); // Add state for enabling/disabling WiR field
 
   useEffect(() => {
     async function fetchFormData() {
@@ -24,11 +28,15 @@ function FormComponent(props) {
         setDataSources(response.data.data_sources);
         setLanguages(response.data.languages);
         setModels(response.data.models);
+        setWomenInRed(response.data.women_in_red)
+        setOccupations(response.data.occupations)
         setFormData({
           dataSource: response.data.data_sources[0],
           language: Object.keys(response.data.languages)[0],
           model: [Object.keys(response.data.models)[0]], // Set initial model key as an array
           subject: '',
+          womanInRed: '',
+          occupation: '',
           gender: 'N\\A' // Set default gender
         });
       } catch (error) {
@@ -38,47 +46,97 @@ function FormComponent(props) {
     fetchFormData();
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value, options } = e.target;
-    if (name === 'model') {
-      // Handle multi-select for models
-      const selectedModels = [];
-      for (const option of options) {
-        if (option.selected) {
-          selectedModels.push(option.value);
-        }
+const filterWiR = (occupation) => {
+  // filtered women in red by occupation and set form data
+  if (occupation in womenInRed) {
+    const filteredList = womenInRed[occupation];
+    setFilteredWomenInRed(filteredList);
+
+    // Preset womanInRed to the first item in filteredWomenInRed
+    setFormData((prevState) => ({
+      ...prevState,
+      occupation: occupation, // Ensure the occupation is also updated
+      womanInRed: filteredList.length > 0 ? filteredList[0] : ''
+    }));
+    setIsWiREnabled(true);
+  } else {
+    setFilteredWomenInRed([]);
+
+    // Reset womanInRed and occupation fields
+    setFormData((prevState) => ({
+      ...prevState,
+      occupation: '',
+      womanInRed: ''
+    }));
+    setIsWiREnabled(false);
+  }
+};
+
+
+
+ const handleChange = (e) => {
+  const { name, value, options } = e.target;
+
+  if (name === 'occupation') {
+    // Call filterWiR when occupation changes
+    filterWiR(value);
+  }
+
+  if (name === 'model') {
+    // Handle multi-select for models
+    const selectedModels = [];
+    for (const option of options) {
+      if (option.selected) {
+        selectedModels.push(option.value);
       }
-      setFormData({
-        ...formData,
-        [name]: selectedModels
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value
-      });
     }
-  };
+
+    // Use functional setFormData to ensure the latest state is used
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: selectedModels
+    }));
+  } else {
+    // Use functional setFormData here as well
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value
+    }));
+  }
+};
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setShowAlert(false);
-    if (formData.subject.trim()) {
-      // Reset wikipage on a new search
-      if (wikiPage.title !== '') {
-        setWikiPage({ title: '', content: '' });
-      }
-      onQuery({
-        entity_name: formData.subject,
-        language: formData.language,
-        data_source: formData.dataSource,
-        model: formData.model, // Send model keys to backend as an array
-        gender: formData.gender // Include gender in the query
-      });
-    } else {
-      setAlertMessage('Entity cannot be empty');
+    setShowAlert(false)
+    if (formData.subject.trim() && formData.womanInRed.trim()){
+      setAlertMessage(
+          'You must specify either an entity or a woman in red, but not both.'
+      );
       setShowAlert(true);
+      return
     }
+    else if (formData.subject.trim() === '' && formData.womanInRed.trim() === ''){
+      setAlertMessage(
+          'You must specify either an entity or a woman in red.'
+      );
+      setShowAlert(true);
+      return
+    }
+
+    // Reset wikipage on a new search
+    if (wikiPage.title !== '') {
+      setWikiPage({ title: '', content: '' });
+    }
+    onQuery({
+      entity_name: formData.subject || formData.womanInRed,
+      language: formData.language,
+      data_source: formData.dataSource,
+      model: formData.model, // Send model keys to backend as an array
+      gender: formData.gender, // Include gender in the query
+      woman_in_red: formData.womanInRed,
+    });
+
   };
 
   return (
@@ -104,26 +162,41 @@ function FormComponent(props) {
                 <p style={{ color: 'white' }}>Or select a Woman in Red (filter by occupation):</p>
                 <Row>
                     <Col md={6}>
-                      <Form.Group controlId="occupationInput" className="mb-3">
-                        <Form.Control
-                            as="select"
-                            name="occupation"
-                            value={formData.occupation}
-                            onChange={handleChange}
-                        >
-                          <option>-- Occupation --</option>
-                        </Form.Control>
-                      </Form.Group>
-                      <Form.Group controlId="womanInRedSelect" className="mb-3">
-                        <Form.Control
-                          as="select"
-                          name="womanInRed"
-                          value={formData.womanInRed}
-                          onChange={handleChange}
-                        >
-                          <option>-- Woman in Red --</option>
-                        </Form.Control>
-                      </Form.Group>
+                    <Form.Group controlId="occupationInput" className="mb-3">
+                      <Form.Control
+                        as="select"
+                        name="occupation"
+                        value={formData.occupation}
+                        onChange={handleChange}
+                      >
+                        {/* Add default empty option with placeholder */}
+                        <option value="">-- Occupation --</option>
+                        {occupations.map((occ) => (
+                          <option key={occ} value={occ}>
+                            {occ}
+                          </option>
+                        ))}
+                      </Form.Control>
+                    </Form.Group>
+
+                    <Form.Group controlId="womanInRedSelect" className="mb-3">
+                      <Form.Control
+                        as="select"
+                        name="womanInRed"
+                        value={formData.womanInRed}
+                        onChange={handleChange}
+                        disabled={!isWiREnabled} // Disable the field until an occupation is selected
+                      >
+                        {/* Add default empty option with placeholder */}
+                        <option value="">-- Woman in Red --</option>
+                        {filteredWomenInRed.map((wir) => (
+                          <option key={wir} value={wir}>
+                            {wir}
+                          </option>
+                        ))}
+                      </Form.Control>
+                    </Form.Group>
+
                     </Col>
                     <Col md={6} style={{ textAlign: 'left', fontSize: '0.8em', color: 'white' }}>
                       <p>{WiRDescr}</p>

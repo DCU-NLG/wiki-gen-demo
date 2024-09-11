@@ -10,7 +10,7 @@ import forge_main
 import setup_repo
 
 # Michela's LLM system
-import llm_main
+# import llm_main
 
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
@@ -142,8 +142,9 @@ CATEGORIES = [
 ]
 
 DATA_SOURCES = [
-    "Ontology",
-    "Infobox"
+    "DBpedia Ontology",
+    "Wikipedia Infobox",
+    "Wikidata"
 ]
 
 LANGUAGES = {
@@ -169,6 +170,23 @@ MODELS = {
     },
 }
 
+WIR_BY_CAT = {
+    "cat0": [
+        "wir0",
+        "wir1",
+        "wir2"
+    ],
+    "cat1": [
+        "wir0",
+        "wir1",
+        "wir2"
+    ],
+    "cat2": [
+        "wir0",
+        "wir1",
+        "wir2"
+    ],
+}
 
 @app.route('/form-data', methods=['GET'])
 def form_data():
@@ -177,6 +195,8 @@ def form_data():
         'data_sources': DATA_SOURCES,
         'languages': LANGUAGES,
         'models': {k: v["full_name"] for (k, v) in MODELS.items()},
+        'women_in_red': WIR_BY_CAT,
+        'occupations': list(WIR_BY_CAT.keys()),
     })
 
 
