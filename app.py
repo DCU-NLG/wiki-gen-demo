@@ -10,12 +10,11 @@ import codecs
 import forge_main
 import setup_repo
 
-# Michela's LLM system
-# import llm_main
-
+from llm import get_gpt35_turbo
+from dotenv import load_dotenv, find_dotenv
 import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
+pp = pprint.PrettyPrinter(indent=4)
 
 app = Flask(__name__)
 CORS(app)  # This will allow all origins by default
@@ -35,7 +34,6 @@ def query_triples():
     category = 'Unknown'
     language = data.get('language')
     data_source = data.get('data_source')
-    gender = data.get('gender')
 
     # Set parameters and instantiate variables for parameters
     input_entity_name, _language, _input_category, triple_source, ignore_properties, _group_modules_prm, _split = forge_main.setParametersGeneral(
@@ -118,7 +116,8 @@ def forge_generation(triples, args: Dict[str, Any] = None):
 
 def llm_generation(triples, args: Dict[str, Any] = None):
     llm_triples = [f"{triple[0]} | {triple[1]} | {triple[2]}" for triple in triples.values()]
-    output = llm_main.GPT35_MODEL.generate_api(llm_triples, language=args['language'], prompt_type='few_shot')
+    model = get_gpt35_turbo()
+    output = model.generate_api(llm_triples, language=args['language'], prompt_type='few_shot')
     return output
 
 

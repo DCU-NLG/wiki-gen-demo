@@ -1,6 +1,7 @@
 # general imports
 import os
 import json
+from functools import lru_cache
 
 # model related imports
 from aixplain.factories.model_factory import ModelFactory
@@ -25,7 +26,7 @@ class PretrainedModel:
             'AR': 'Arabic' 
         }
 
-        with open(os.path.join(os.getcwd(), 'LLM', "hyperparameters.json"), "r") as f:
+        with open(os.path.join(os.getcwd(), 'llm', "hyperparameters.json"), "r") as f:
             hyperparameters = json.load(f)    
         self.hyperparameters = hyperparameters[model_id]
 
@@ -84,3 +85,12 @@ class PretrainedModel:
 
         return output
     
+
+@lru_cache(maxsize=None)
+def get_gpt35_turbo():
+    return PretrainedModel('650aef186eb5635dcf027941')
+
+
+@lru_cache(maxsize=None)
+def get_llama2_70_chat():
+    return PretrainedModel('663501866eb56340906c3491')
