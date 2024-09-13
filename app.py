@@ -25,6 +25,7 @@ FORGE_ROOT_FOLDER = os.path.join(os.getcwd(), 'FORGe')
 triple2predArg, triple2Conll_jar, morph_folder_name, morph_input_folder, morph_output_folder, props_list_path = setup_repo.prepare_repo_ruleBased(
     FORGE_ROOT_FOLDER)
 
+gpt_35_turbo_model = get_gpt35_turbo()
 
 # Returns a list of tuples (subject, predicate, object)
 @app.route('/query-triples', methods=['POST'])
@@ -116,8 +117,7 @@ def forge_generation(triples, args: Dict[str, Any] = None):
 
 def llm_generation(triples, args: Dict[str, Any] = None):
     llm_triples = [f"{triple[0]} | {triple[1]} | {triple[2]}" for triple in triples.values()]
-    model = get_gpt35_turbo()
-    output = model.generate_api(llm_triples, language=args['language'], prompt_type='few_shot')
+    output = gpt_35_turbo_model.generate_api(llm_triples, language=args['language'], prompt_type='few_shot')
     return output
 
 
