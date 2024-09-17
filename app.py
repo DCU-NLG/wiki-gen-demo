@@ -117,7 +117,10 @@ def forge_generation(triples, args: Dict[str, Any] = None):
 
 def llm_generation(triples, args: Dict[str, Any] = None):
     llm_triples = [f"{triple[0]} | {triple[1]} | {triple[2]}" for triple in triples.values()]
-    output = gpt_35_turbo_model.generate_api(llm_triples, language=args['language'], prompt_type='few_shot')
+    output = gpt_35_turbo_model.generate_api(llm_triples,
+                                             language=args['language'],
+                                             prompt_type='few_shot',
+                                             gender=args['gender'])
     return output
 
 
