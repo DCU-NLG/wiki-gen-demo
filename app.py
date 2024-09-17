@@ -2,6 +2,7 @@
 import json
 from typing import Dict, List, Tuple, Any
 from flask import Flask, request, jsonify
+from flask import render_template
 from flask_cors import CORS
 import os
 import codecs
@@ -16,7 +17,11 @@ import pprint
 
 pp = pprint.PrettyPrinter(indent=4)
 
-app = Flask(__name__)
+app = Flask(__name__,
+            static_url_path='',
+            static_folder='./frontend/build',
+            template_folder='./frontend/build'
+)
 CORS(app)  # This will allow all origins by default
 
 FORGE_ROOT_FOLDER = os.path.join(os.getcwd(), 'FORGe')
@@ -26,6 +31,12 @@ triple2predArg, triple2Conll_jar, morph_folder_name, morph_input_folder, morph_o
     FORGE_ROOT_FOLDER)
 
 gpt_35_turbo_model = get_gpt35_turbo()
+
+
+@app.route("/")
+def serve():
+    return render_template("index.html")
+
 
 # Returns a list of tuples (subject, predicate, object)
 @app.route('/query-triples', methods=['POST'])
