@@ -3,11 +3,7 @@
 
 import subprocess
 import zipfile
-import sys
 import os
-
-def pipInstall(package):
-  subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 def unzipTo(path_to_zip_file, directory_to_extract_to):
   with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
@@ -48,4 +44,3 @@ def prepare_repo_ruleBased(root_folder):
   
   return triple2predArg, triple2Conll_jar, morph_folder_name, morph_input_folder, morph_output_folder, props_list_path
 
-pipInstall('SPARQLWrapper')

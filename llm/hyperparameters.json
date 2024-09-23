@@ -1,13 +1,14 @@
 {
-    "650aef186eb5635dcf027941": {
+    "640b517694bf816d35a59125": {
         "model_name": "Chat GPT 3.5 Turbo (16k)",
         "max_new_tokens": 200,
         "start_instr": "",
         "end_instr": "",
         "triples_div": "\n",
         "start_ans": "",
+        "gender_template": " using {gender} pronouns",
         "few_shot": {
-            "instruction": "{start_instr}Write the following triples as fluent {language} text.\n\n{examples}\n##\nTriples 3: \"\"\"\n{triples}\n\"\"\"\n{end_instr}{start_ans}Text 3:",
+            "instruction": "{start_instr}Write the following triples as fluent {language} text{gender}.\n\n{examples}\n##\nTriples 3: \"\"\"\n{triples}\n\"\"\"\n{end_instr}{start_ans}Text 3:",
             "example": "Triples {i}: \"\"\"\n{triples}\n\"\"\"\nText {i}: {target}",
             "examples_divider": "\n##\n",
             "fixed_examples": [
@@ -43,7 +44,7 @@
                 }
             ]
         },
-        "zero_shot": "{start_instr}Write the following triples as fluent {language} text.\n\nTriples: \"\"\"\n{triples}\n\"\"\"\n\n{end_instr}{start_ans}Text: "
+        "zero_shot": "{start_instr}Write the following triples as fluent {language} text{gender}.\n\nTriples: \"\"\"\n{triples}\n\"\"\"\n\n{end_instr}{start_ans}Text: "
     },
     "663501866eb56340906c3491": {
         "model_name": "Llama 2 Chat 70B",
@@ -52,8 +53,9 @@
         "end_instr": "[/INST]",
         "triples_div": "\n",
         "start_ans": "[/INST]",
+        "gender_template": " using {gender} pronouns",
         "few_shot": {
-            "instruction": "{start_instr}Write the following triples as fluent {language} text.\n\n{examples}\n##\nTriples 3: \"\"\" {triples} \"\"\" {end_instr}{start_ans} Text 3:",
+            "instruction": "{start_instr}Write the following triples as fluent {language} text{gender}.\n\n{examples}\n##\nTriples 3: \"\"\" {triples} \"\"\" {end_instr}{start_ans} Text 3:",
             "example": "Triples {i}: \"\"\" {triples} \"\"\"\nText {i}: {target}",
             "examples_divider": "\n##\n",
             "fixed_examples": [
@@ -89,6 +91,6 @@
                 }
             ]
         },
-        "zero_shot": "{start_instr} Write the following triples as fluent {language} text. Triples: \"\"\" {triples} \"\"\" {end_instr}{start_ans} Text: "
+        "zero_shot": "{start_instr} Write the following triples as fluent {language} text{gender}. Triples: \"\"\" {triples} \"\"\" {end_instr}{start_ans} Text: "
     }
 }
