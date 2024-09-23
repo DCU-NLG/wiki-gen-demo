@@ -1,6 +1,6 @@
 """Simple flask server"""
 import json
-from typing import Dict, List, Tuple, Any
+from typing import Dict, Any
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
@@ -10,8 +10,7 @@ import codecs
 import forge_main
 import setup_repo
 
-from llm import get_gpt35_turbo
-from dotenv import load_dotenv, find_dotenv
+from llm import gpt_35_turbo_model, llama2_70_chat_model
 import pprint
 
 pp = pprint.PrettyPrinter(indent=4)
@@ -49,10 +48,9 @@ def query_triples():
 
 # All generate functions should take the input triples (list of lists) and k-v pair args
 def example_generation(triples, args: Dict[str, Any] = None):
-
     sentences = []
     for triple in triples.values():
-        sentences.append(f"{triple[0]} {triple[1]} is {triple[2]}".replace("_"," "))
+        sentences.append(f"{triple[0]} {triple[1]} is {triple[2]}".replace("_", " "))
     return ".  ".join(sentences) + "."
 
 
@@ -114,11 +112,23 @@ def forge_generation(triples, args: Dict[str, Any] = None):
     return s
 
 
-def llm_generation(triples, args: Dict[str, Any] = None):
+def llm_generation(model_fn: callable, triples, args: Dict[str, Any] = None):
     llm_triples = [f"{triple[0]} | {triple[1]} | {triple[2]}" for triple in triples.values()]
-    model = get_gpt35_turbo()
-    output = model.generate_api(llm_triples, language=args['language'], prompt_type='few_shot')
+    output = model_fn.generate_api(
+        llm_triples,
+        language=args['language'],
+        prompt_type='few_shot',
+        gender=args['gender']
+    )
     return output
+
+
+def llm_generate_gpt35(triples, args: Dict[str, Any] = None):
+    return llm_generation(gpt_35_turbo_model, triples, args)
+
+
+def llm_generate_llama2(triples, args: Dict[str, Any] = None):
+    return llm_generation(llama2_70_chat_model, triples, args)
 
 
 CATEGORIES = [
@@ -150,7 +160,6 @@ DATA_SOURCES = [
     "Wikidata"
 ]
 
-
 LANGUAGES = {
     "EN": "English",
     "GA": "Irish"
@@ -163,8 +172,13 @@ MODELS = {
         "supported_languages": ["EN", "GA"]
     },
     "GPT3.5": {
-        "full_name": "LLM - GPT-3.5",
-        "function": llm_generation,  # The name of the function (no parenthesis)
+        "full_name": "GPT-3.5 Turbo",
+        "function": llm_generate_gpt35,  # The name of the function (no parenthesis)
+        "supported_languages": ["EN", "GA"]
+    },
+    "LLaMa2-70B": {
+        "full_name": "LLaMa2 70B",
+        "function": llm_generate_llama2,  # The name of the function (no parenthesis)
         "supported_languages": ["EN", "GA"]
     },
     "Baseline": {
@@ -196,7 +210,7 @@ def generate():
 
     pp.pprint(data)
 
-    triples = {int(k): v for k,v in data["triplets"].items()}
+    triples = {int(k): v for k, v in data["triplets"].items()}
     language = data["language"]
     data_source = data["dataSource"]
     models = data["model"]
@@ -222,4 +236,3 @@ def generate():
 
 if __name__ == '__main__':
     app.run()
-

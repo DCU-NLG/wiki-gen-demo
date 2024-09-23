@@ -1,7 +1,7 @@
 # Seed Wikipedia page generator demo
 
 ## Quick (Dev) Setup
-### Backend
+### Backend (Python Flask)
 Install the required dependencies in a virtual environment
 ```shell
 python -m venv .venv
@@ -33,7 +33,7 @@ Lastly, run the app
 flask --app app debug run
 ```
 
-### Frontend
+### Frontend (ReactJS)
 
 ```shell
 cd frontend/
