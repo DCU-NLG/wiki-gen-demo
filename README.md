@@ -24,7 +24,7 @@ sudo apt install p7zip-full p7zip-rar
 Create a `env` files under `LLM` and set your aixplain API key
 
 ```bash
-echo "YOUR-API-KEY" >> .env
+echo "TEAM_API_KEY=YOUR-API-KEY" >> .env
 ```
 
 Lastly, run the app

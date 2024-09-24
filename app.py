@@ -2,6 +2,7 @@
 import json
 from typing import Dict, Any
 from flask import Flask, request, jsonify
+from flask import render_template
 from flask_cors import CORS
 import os
 import codecs
@@ -15,7 +16,11 @@ import pprint
 
 pp = pprint.PrettyPrinter(indent=4)
 
-app = Flask(__name__)
+app = Flask(__name__,
+            static_url_path='',
+            static_folder='./frontend/build',
+            template_folder='./frontend/build'
+)
 CORS(app)  # This will allow all origins by default
 
 FORGE_ROOT_FOLDER = os.path.join(os.getcwd(), 'FORGe')
@@ -24,6 +29,10 @@ FORGE_ROOT_FOLDER = os.path.join(os.getcwd(), 'FORGe')
 triple2predArg, triple2Conll_jar, morph_folder_name, morph_input_folder, morph_output_folder, props_list_path = setup_repo.prepare_repo_ruleBased(
     FORGE_ROOT_FOLDER)
 
+
+@app.route("/")
+def serve():
+    return render_template("index.html")
 
 # Returns a list of tuples (subject, predicate, object)
 @app.route('/query-triples', methods=['POST'])
@@ -43,8 +52,9 @@ def query_triples():
         props_list_path, input_entity_name, triple_source, ignore_properties)
 
     print("response: ", list_triple_objects)
-    return jsonify({i: (x.DBsubj, x.DBprop, x.DBobj) for i, x in enumerate(list_triple_objects)})
-
+    response = jsonify({i: (x.DBsubj, x.DBprop, x.DBobj) for i, x in enumerate(list_triple_objects)})
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 # All generate functions should take the input triples (list of lists) and k-v pair args
 def example_generation(triples, args: Dict[str, Any] = None):
@@ -194,7 +204,7 @@ with open("data/women_in_red_by_category.json") as f:
 
 @app.route('/form-data', methods=['GET'])
 def form_data():
-    return jsonify({
+    response = jsonify({
         'categories': CATEGORIES,
         'data_sources': DATA_SOURCES,
         'languages': LANGUAGES,
@@ -202,6 +212,8 @@ def form_data():
         'women_in_red': WIR_BY_CAT,
         'occupations': list(WIR_BY_CAT.keys()),
     })
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 
 @app.route('/generate', methods=['POST'])
