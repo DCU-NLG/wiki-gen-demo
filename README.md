@@ -1,5 +1,8 @@
 # Seed Wikipedia page generator demo
 
+## Try out the online demo
+The generator is currently available [here](http://ec2-18-224-151-90.us-east-2.compute.amazonaws.com:3000/). 
+
 ## Quick (Dev) Setup
 ### Backend (Python Flask)
 Install the required dependencies in a virtual environment
